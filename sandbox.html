@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Import Map Generator - JSPM.IO</title>
+<meta property="og:title" content="Import Map Generator">
+<meta property="og:image" content="https://jspm.org/jspm.png">
+<meta name="Description" content="Generate an import map to load any third party dependencies from the JSPM.IO CDN">
+<meta property="og:description" content="Generate an import map to load any third party dependencies from the JSPM.IO CDN">
+<meta property="og:url" content="https://jspm.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css">
+<link rel="preload" as="font" href="/sourcesans-light.woff2" type="font/woff2" crossorigin="anonymous">
+<!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-40327700-1"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-40327700-2');</script>
+
+<body>
+  <div class="topbar">
+    <a style="display: block" href="/"><div class="logobox" href="/"></div><h1 class="logo">JSPM.IO</h1></a>
+    <div class="title">
+      <h1>Import Map Generator /&nbsp;</h1>
+      <input class="text" type="text" value=""/>
+    </div>
+    <ul class="toplinks"><li><a href="/jspm-dev-release">Explainer</a></li><li><a href="/">Docs</a></li><li><a href="/sandbox">API</a></li><li class="github"><a target="_blank" href="https://github.com/jspm/project" rel="noopener"></a></li></ul></div>
+  <div class="sidebar">
+    <div class="add">
+      <input type="search" class="depbox" title='Add a new dependency. For example: "react", "lit-element@2", "lodash/sort".' placeholder="Add Dependency" pattern="(\w+:)?(@[^\/:\\]+\/)?[^\/:\\]+(@[^\/:]+)?(\/.*[^\/])?" />
+    </div>
+    <div class="dependencies nopreload">
+      <progress-bar class="deps"></progress-bar>
+      <div class="dependencies-container"></div>
+    </div>
+    <div class="env">
+      <h2>Environment Conditions</h2>
+      <div class="button-cols">
+        <div class="button-col">
+          <div class="button r">
+            <input type="checkbox" id="env-development" class="checkbox" checked>
+            <div class="knobs"><div class="knob"></div></div>
+            <div class="layer"></div>
+          </div>
+          <label class="label" for="env-development" title="For packages that provide a development export with extra debug information in their package.json, used if available.">Development</label>
+        </div>
+        <div class="button-col">
+          <div class="button r">
+            <input type="checkbox" id="env-production" class="checkbox">
+            <div class="knobs"><div class="knob"></div></div>
+            <div class="layer"></div>
+          </div>
+          <label class="label" for="env-production" title="For packages that define a smaller production export in their package.json, used if available.">Production</label>
+        </div>
+      </div>
+      <div class="button r">
+        <input type="checkbox" id="env-browser" class="checkbox" checked>
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="env-browser" title="For packages that define a dedicated browser export in their package.json, used if available.">Browser</label>
+      <div class="button r">
+        <input type="checkbox" id="env-node" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="env-node" title="For packages that define a specific Node.js export in their package.json, used if available.">Node</label>
+      <div class="button r">
+        <input type="checkbox" id="env-deno" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="env-deno" title="Basically no packages have a 'deno' export in their package.json, but if they did this would support it.">Deno</label>
+    </div>
+  </div>
+  <progress-bar class="main"></progress-bar>
+  <div class="container">
+    <pre><code></code></pre>
+  </div>
+  <div class="buttonbar">
+    <select-box class="up" id="map-mode" title="Import map module format">
+      <div class="selected"><span>Native Modules</span></div>
+      <div class="options">
+        <div class="option" title="Native ES module import maps - only works in Chrome 91+, the only browser which supports import maps."><span>Native Modules</span></div>
+        <div class="option" title="Output an ES Module Shims import map, supported in all browsers that support ES modules (most browsers)."><span>ES Module Shims</span></div>
+        <div class="option" title="Output a SystemJS import map, SystemJS requires its own 'system' module format but works in all browsers back to IE11."><span>SystemJS</span></div>
+      </div>
+    </select-box>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-boilerplate" class="checkbox" checked>
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="map-boilerplate" title="Embed the import map output in a boilerplate HTML file.">HTML Boilerplate</label>
+    </div>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-minify" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="map-minify" title="Remove all unnecessary whitespace in the output.">Minify Whitespace</label>
+    </div>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-json" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="map-json" title="Only provide the generated import map JSON.">JSON Only</label>
+    </div>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-integrity" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="map-integrity" title="Output the subresource integrity on the link preloads for all resources.">Integrity</label>
+    </div>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-preload" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="map-preload" title="Inject link preload tags for dependencies.">Preload</label>
+    </div>
+    <div class="end">
+      <button id="btn-copy-share" type="button" title="Copy the shareable URL of this page.">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.39198 0.608017C6.1755 0.391531 5.8245 0.391531 5.60802 0.608017L2.08017 4.13587C1.86368 4.35235 1.86368 4.70335 2.08017 4.91983C2.29665 5.13632 2.64765 5.13632 2.86413 4.91983L6 1.78397L9.13587 4.91983C9.35235 5.13632 9.70335 5.13632 9.91983 4.91983C10.1363 4.70335 10.1363 4.35235 9.91983 4.13587L6.39198 0.608017ZM6.55435 9L6.55435 1L5.44565 1L5.44565 9L6.55435 9Z" fill="#7B7B7B"/>
+          <path d="M11 8.99991V9.99991C11 10.5522 10.5523 10.9999 10 10.9999H2C1.44772 10.9999 1 10.5522 1 9.99991V8.99991" stroke="#7B7B7B"/>
+        </svg>
+        Copy Share URL
+      </button>
+      <button id="btn-download" type="button" title="Download the generated map above as a file.">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.64645 9.50858C5.84171 9.70385 6.15829 9.70385 6.35355 9.50858L9.53553 6.3266C9.7308 6.13134 9.7308 5.81476 9.53553 5.6195C9.34027 5.42423 9.02369 5.42423 8.82843 5.6195L6 8.44792L3.17157 5.6195C2.97631 5.42423 2.65973 5.42423 2.46447 5.6195C2.2692 5.81476 2.2692 6.13134 2.46447 6.3266L5.64645 9.50858ZM5.5 0.155029L5.5 9.15503L6.5 9.15503L6.5 0.155029L5.5 0.155029Z" fill="#7B7B7B"/>
+          <line y1="10.655" x2="12" y2="10.655" stroke="#7B7B7B"/>
+        </svg>
+        Download
+      </button>
+      <button id="btn-copy" type="button" title="Copy the generated map above to the clipboard.">
+        <svg width="13" height="15" viewBox="0 0 13 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="top: 0.2em;">
+          <path d="M11.8492 11.5902H3C2.72386 11.5902 2.5 11.3663 2.5 11.0902V1.16773C2.5 0.891583 2.72386 0.667725 3 0.667725H8.94596C9.10695 0.667725 9.2581 0.745246 9.35203 0.875998L12.2553 4.91728C12.3164 5.00229 12.3492 5.10433 12.3492 5.209V11.0902C12.3492 11.3663 12.1254 11.5902 11.8492 11.5902Z" fill="#FBFBFB" stroke="#7B7B7B"/>
+          <path d="M8.45001 1.10001V4.60001C8.45001 5.15229 8.89773 5.60001 9.45001 5.60001H12.45" stroke="#7B7B7B"/>
+          <path d="M9.84924 13.5902H1C0.723857 13.5902 0.5 13.3663 0.5 13.0902V3.16773C0.5 2.89158 0.723858 2.66772 1 2.66772H6.94596C7.10695 2.66772 7.2581 2.74525 7.35203 2.876L10.2553 6.91728C10.3164 7.00229 10.3492 7.10433 10.3492 7.209V13.0902C10.3492 13.3663 10.1254 13.5902 9.84924 13.5902Z" fill="#FBFBFB" stroke="#7B7B7B"/>
+          <path d="M6.45001 3.10001V6.60001C6.45001 7.15229 6.89773 7.60001 7.45001 7.60001H10.45" stroke="#7B7B7B"/>
+        </svg>  
+        Copy
+      </button>
+    </div>
+  </div>
+  <div class="help">WTF?</div>
+</body>
+
+<script type="importmap">
+{
+  "imports": {
+    "buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
+    "zlib": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/zlib.js"
+  }
+}
+</script>
+<script type="module" src="src/mapapp.js"></script>

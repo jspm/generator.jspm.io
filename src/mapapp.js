@@ -238,7 +238,8 @@ class ImportMapApp {
         function systemReplace (url) {
           return url.replace(/^https:\/\/ga\.jspm\.io\//g, 'https://ga.system.jspm.io/');
         }
-        preloads = preloads.map(preload => ({ ...preload, url: systemReplace(preload.url) }));
+        if (preloads)
+          preloads = preloads.map(preload => ({ ...preload, url: systemReplace(preload.url) }));
         if (map.imports) {
           for (const impt of Object.keys(map.imports))
             map.imports[impt] = systemReplace(map.imports[impt]);
@@ -269,6 +270,7 @@ class ImportMapApp {
         }));
     }
     catch (e) {
+      console.error(e);
       this.setError(e.toString());
       toast('Error creating import map.');
     }

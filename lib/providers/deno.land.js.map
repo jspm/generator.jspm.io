@@ -1,0 +1,1 @@
+{"version":3,"file":"deno.land.js","sourceRoot":"","sources":["../../src/providers/deno.land.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,MAAM,GAAG,sBAAsB,CAAC;AAE7C,MAAM,UAAU,cAAc,CAAE,GAAW;IACzC,OAAO,MAAM,GAAG,GAAG,CAAC,KAAK,CAAC,MAAM,CAAC,MAAM,CAAC,CAAC,KAAK,CAAC,GAAG,CAAC,CAAC,KAAK,EAAE,GAAG,GAAG,CAAC;AACpE,CAAC"}

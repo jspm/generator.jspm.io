@@ -140,17 +140,17 @@ a {
 /* select box */
 select-box {
   overflow: hidden;
-  font-size: 0.9em;
+  font-size: 14px;
   color: #787878;
-  border-radius: 2em;
+  border-radius: 20px;
   border: none;
   box-shadow: 0.2px 0.2px 1px rgba(0, 0, 0, 0.6);
-  height: 1.4em;
+  height: 20px;
   cursor: pointer;
   position: relative;
   background-repeat: no-repeat;
-  background-position: 0.5em 0.26em;
-  background-size: 0.9em 0.9em;
+  background-position: 6px 4px;
+  background-size: 12px 12px;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDUgMTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIuNSAxMEwwLjMzNDkzNiA2LjI1TDQuNjY1MDYgNi4yNUwyLjUgMTBaIiBmaWxsPSIjQjlCOUI5Ii8+PHBhdGggZD0iTTIuNSAwTDQuNjY1MDYgMy43NUwwLjMzNDkzNyAzLjc1TDIuNSAwWiIgZmlsbD0iI0I5QjlCOSIvPjwvc3ZnPg==");
 }
 select-box.loading {
@@ -158,36 +158,36 @@ select-box.loading {
 }
 select-box.borderless {
   box-shadow: none;
-  background-size: 0 0;
+  background-size: 0 0 ;
 }
 select-box:hover, select-box.expanded {
   background-color: #ededed;
 }
 select-box.borderless:hover, select-box.borderless.expanded  {
   box-shadow: 0.2px 0.2px 1px rgba(0, 0, 0, 0.6);
-  background-size: 0.9em 0.9em;
+  background-size: 12px 12px;
 }
 .options {
   color: #787878;
   cursor: pointer;
-  font-size: 14px;
   position: absolute;
   z-index: 20000;
   background-color: #fff;
-  max-height: 20em;
+  max-height: 600px;
   overflow-y: auto;
   background-color: #fff;
-  border-radius: 1em;
+  border-radius: 10px;
   box-shadow: 0.2px 0.2px 1px rgba(14, 13, 13, 0.6);
 }
 select-box .selected {
-  padding-right: 1em;
+  padding-right: 5px;
+  margin-top: -3px;
 }
 .options .option {
-  padding-right: 1em;
+  padding-right: 5px;
 }
 .options::-webkit-scrollbar {
-  width: 0.5em;
+  width: 5px;
   background-color: transparent;
 }
 .options::-webkit-scrollbar-button:vertical:increment {
@@ -197,19 +197,15 @@ select-box .selected {
   background-color: transparent;
 }
 .options::-webkit-scrollbar-thumb {
-  border-radius: 5em;
-  box-shadow: inset 0 0 1em rgba(0,0,0,0.5);
+  border-radius: 10px;
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
   opacity: 0.5;
-}
-select-box .selected {
-  margin-top: -0.15em;
 }
 select-box .selected > span, .option > span {
   user-select: none;
   display: block;
-  padding: 0.1em 0.8em 0.1em 1.7em;
-  height: 1.5em;
-  line-height: 1.5em;
+  padding: 5px 5px 5px 22px;
+  line-height: 15px;
 }
 .options .option:hover {
   background-color: #ededed;
@@ -413,13 +409,15 @@ input:invalid {
   margin: 0;
 }
 select-box.version {
-  font-size: 1em;
+  font-size: 16px;
   color: #595959;
+}
+.options { 
+  font-size: 14px;
 }
 select-box .options {
   position: static;
-  margin-left: 0.1em;
-  font-size: 1em;
+  padding-left: 10px;
 }
 .sidebar .dependencies div.subpath.add-export .selected {
   color: #aaaaaa;

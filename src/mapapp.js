@@ -230,7 +230,7 @@ class ImportMapApp {
       await new Promise(resolve => setTimeout(resolve, 300));
       if (this.job !== job) return;
 
-      let { map, preloads } = await getMap(this.state.deps, this.state.output.integrity, this.state.output.preload);
+      let { map, preloads } = await getMap(this.state.deps, this.state.output.integrity, this.state.output.preload, this.state.env);
 
       const scripts = this.state.output.mode === MODE_SYSTEM ? await getSystemScripts(this.state.output.integrity) : this.state.output.mode === MODE_ESMS ? await getESModuleShimsScript(this.state.output.integrity) : null;
 
@@ -281,6 +281,8 @@ class ImportMapApp {
   outputChange (e) {
     const outputOption = e.target.id.slice(4);
     this.state.output[outputOption] = e.target.checked;
+    if (outputOption === 'integrity' && e.target.checked)
+      toast('TODO: Integrity output.');
     if (outputOption === 'json' && e.target.checked) {
       document.querySelector('#map-boilerplate').checked = false;
       this.state.output.boilerplate = false;
@@ -358,16 +360,7 @@ const MODE_SYSTEM = 2;
 
 new ImportMapApp({
   name: 'Untitled',
-  deps: [
-    ["codemirror@5.58.1", true],
-    ["codemirror@5.58.1/mode/css/css.js", true],
-    ["codemirror@5.58.1/mode/htmlmixed/htmlmixed.js", true],
-    ["codemirror@5.58.1/mode/javascript/javascript.js", true],
-    ["codemirror@5.58.1/mode/xml/xml.js", true],
-    ["es-module-lexer@1.2.3", true],
-    ["lit-element@2.3.4", true],
-    ["sver@2.3.4/convert-range", true]
-  ],
+  deps: [],
   env: {
     development: true,
     production: false,

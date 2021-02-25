@@ -13,7 +13,7 @@ progressBar.setEstimate(5000);
 
 const renderSubpath = (subpath) => `
       <div class="subpath">
-        <span>${subpath.subpath.replace(/\./g, '<span class="dot">.</span>')}${subpath.subpath === '.' ? ' <span class="info">[main]</span>' : ''}</span>
+        <span>${subpath.subpath.replace(/\./g, '<span class="dot">.</span>')}${subpath.subpath === '.' ? ' <span class="info">[main]<\/span>' : ''}</span>
         <div class="right">
           <div class="preload">
             <label for="preload${++subpathCnt}">Preload</label>
@@ -67,6 +67,8 @@ function getDepEl (name) {
 async function loadAndInjectMetadata ({ name, version }) {
   await Promise.all([
     getVersions(name).then(versions => {
+      if (!versions)
+        return;
       const depEl = getDepEl(name);
       if (!depEl)
         return;
@@ -74,10 +76,12 @@ async function loadAndInjectMetadata ({ name, version }) {
       depEl.querySelector('select-box.version').className = 'version borderless unsized';
     }),
     getExports(name, version).then(exports => {
+      if (!exports)
+        return;
       const depEl = getDepEl(name);
       if (!depEl)
         return;
-      depEl.querySelector('select-box.new-export .options').innerHTML = exports.map(e => `<div class="option"><span>${e}</span></div>`).join('\n');
+      depEl.querySelector('select-box.new-export .options').innerHTML = exports.map(e => `<div class="option"><span>${e}${e === '.' ? ' <span class="info">[main]</span>' : ''}</span></div>`).join('\n');
       depEl.querySelector('select-box.new-export').className = 'new-export borderless';
     })
   ]);
@@ -118,9 +122,13 @@ export function onDepChange (listener) {
   depsListener = listener;
 }
 
+function sanitizeExport (option) {
+  return option.replace(/ (<span class="info">)?\[main\](<\/span>)?$/, '');
+}
+
 function getSubpathInfo (subpathEl) {
   const { name, version } = getDepInfo(subpathEl.parentNode.parentNode.parentNode);
-  const subpath = subpathEl.querySelector('span').innerText.replace(/ \[main\]$/, '');
+  const subpath = sanitizeExport(subpathEl.querySelector('span').innerText);
   return { name, version, subpath };
 }
 
@@ -191,7 +199,7 @@ function changeHandler (e) {
     e.target.set('Add Package Export');
     // export add
     const { name, version } = getDepInfo(e.target.parentNode.parentNode.parentNode.parentNode);
-    injectDep(name, version, e.detail.new);
+    injectDep(name, version, sanitizeExport(e.detail.new));
   }
 }
 
@@ -217,10 +225,8 @@ function htmlToElement (html) {
 function injectDep (name, version, subpath) {
   const newDep = subpath ? [toPkgStr({ name, version, subpath }), true] : null;
 
-  if (newDep && deps.some(([dep]) => dep === newDep[0])) {
-    toast(`Dependency ${newDep[0]} already exists.`);
+  if (newDep && deps.some(([dep]) => dep === newDep[0]))
     return;
-  }
 
   const depEl = getDepEl(name);
   if (depEl) {
@@ -238,7 +244,6 @@ function injectDep (name, version, subpath) {
       const subpathStartIndex = deps.findIndex(([dep]) => dep === pkgStr || dep.startsWith(pkgStr + '/'));
       const subpathIndex = insertAt - subpathStartIndex;
       const subpathEl = htmlToElement(renderSubpath({ subpath, preload: true }));
-      console.log(subpathIndex);
       depEl.querySelector('.subpaths').insertBefore(subpathEl, depEl.querySelectorAll('div.subpath')[subpathIndex]);
     }
   }

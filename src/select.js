@@ -63,7 +63,7 @@ class SelectBox extends HTMLElement {
     }
     else {
       this.$optionsClone.style.top = (rect.bottom + 3) + 'px';
-      this.$optionsClone.style.left = rect.left + 'px';
+      this.$optionsClone.style.left = (rect.left) + 'px';
       this.$optionsClone.addEventListener('click', this.click);
     }
     this.className = this.baseClassName + ' expanded';

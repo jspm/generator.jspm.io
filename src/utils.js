@@ -6,7 +6,7 @@ export function highlight (code) {
     .replace(/('[^']*')/gm, '<span class=string>$1</span>')
     .replace(/("[^"]*")/gm, '<span class=string>$1</span>')
     .replace(/([^#\d\-a-z\:])(-?\d+)/gm, '$1<span class=number>$2</span>')
-    .replace(/([^\.])?(for|function|new|await|async|throw|return|var|let|const|if|else|true|as|false|this|import|export class|export|from)([^-a-zA-Z=])/gm, '$1<span class=keyword>$2</span>$3');
+    .replace(/([^\.\-]|^)(for|function|new|await|async|throw|return|var|let|const|if|else|true|as|false|this|import|export class|export|from)([^-a-zA-Z=]|$)/gm, '$1<span class=keyword>$2</span>$3');
 }
 
 export function copyToClipboard (text) {

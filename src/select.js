@@ -1,3 +1,6 @@
+const $optionsContainer = Object.assign(document.createElement('div'), { className: 'options-container' });
+document.body.appendChild($optionsContainer);
+
 class SelectBox extends HTMLElement {
   constructor () {
     super();
@@ -44,7 +47,7 @@ class SelectBox extends HTMLElement {
   hide () {
     this.className = this.baseClassName;
     this.open = false;
-    document.body.removeChild(this.$optionsClone);
+    $optionsContainer.removeChild(this.$optionsClone);
     this.$optionsClone.removeEventListener('click', this.click);
   }
 
@@ -54,19 +57,27 @@ class SelectBox extends HTMLElement {
       return;
     const rect = this.getBoundingClientRect();
     this.$optionsClone = this.$options.cloneNode(true);
-    document.body.appendChild(this.$optionsClone);
+    this.$optionsClone.className += ' scroll';
+    $optionsContainer.style.visibility = 'hidden';
+    $optionsContainer.appendChild(this.$optionsClone);
     if (classNames.includes('up')) {
       const optionsRect = this.$options.getBoundingClientRect();
-      this.$optionsClone.style.top = (rect.top - optionsRect.height - 3) + 'px';
-      this.$optionsClone.style.left = rect.left + 'px';
+      $optionsContainer.style.top = (rect.top - optionsRect.height - 3) + 'px';
+      $optionsContainer.style.left = rect.left + 'px';
       this.$optionsClone.addEventListener('click', this.click);
     }
     else {
-      this.$optionsClone.style.top = (rect.bottom + 3) + 'px';
-      this.$optionsClone.style.left = (rect.left) + 'px';
+      $optionsContainer.style.top = (rect.bottom + 3) + 'px';
+      $optionsContainer.style.left = (rect.left) + 'px';
       this.$optionsClone.addEventListener('click', this.click);
     }
     this.className = this.baseClassName + ' expanded';
+    // trigger reflow for scrollbar width
+    this.$optionsClone.querySelector('.option:last-child').style.paddingLeft = '1px';
+    setTimeout(() => {
+      $optionsContainer.style.visibility = 'visible';
+      this.$optionsClone.querySelector('.option:last-child').style.paddingLeft = '0px';
+    });
     this.open = true;
   }
 }

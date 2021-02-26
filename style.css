@@ -169,34 +169,23 @@ select-box.borderless:hover, select-box.borderless.expanded  {
 }
 .options {
   color: #787878;
-  cursor: pointer;
-  position: absolute;
-  z-index: 20000;
-  background-color: #fff;
-  max-height: 600px;
-  overflow-y: auto;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 1px 1px 4px rgba(14, 13, 13, 0.6);
 }
 select-box .selected {
   padding-right: 5px;
   margin-top: -3px;
 }
-.options .option {
-  padding-right: 5px;
-}
-.options::-webkit-scrollbar {
+.options-container::-webkit-scrollbar {
   width: 5px;
+  transform: translateX(10px);
   background-color: transparent;
 }
-.options::-webkit-scrollbar-button:vertical:increment {
+.options-container::-webkit-scrollbar-button:vertical:increment {
   background-color: transparent;
 }
-.options::-webkit-scrollbar-button:vertical:decrement {
+.options-container::-webkit-scrollbar-button:vertical:decrement {
   background-color: transparent;
 }
-.options::-webkit-scrollbar-thumb {
+.options-container::-webkit-scrollbar-thumb {
   border-radius: 10px;
   box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
   opacity: 0.5;
@@ -204,7 +193,7 @@ select-box .selected {
 select-box .selected > span, .option > span {
   user-select: none;
   display: block;
-  padding: 5px 5px 5px 22px;
+  padding: 5px 10px 5px 22px;
   line-height: 15px;
 }
 .options .option:hover {
@@ -417,7 +406,20 @@ select-box.version {
 }
 select-box .options {
   position: static;
-  padding-left: 10px;
+}
+.options-container {
+  margin-left: 10px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 20000;
+  cursor: pointer;
+  background-color: #fff;
+  max-height: 600px;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0.5px 0.5px 2px rgba(14, 13, 13, 0.6);
 }
 .sidebar .dependencies div.subpath.add-export .selected {
   color: #aaaaaa;

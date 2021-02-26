@@ -13,7 +13,7 @@ progressBar.setEstimate(5000);
 
 const renderSubpath = (subpath) => `
       <div class="subpath">
-        <span>${subpath.subpath.replace(/\./g, '<span class="dot">.</span>')}${subpath.subpath === '.' ? ' <span class="info">[main]<\/span>' : ''}</span>
+        <span>${subpath.subpath.replace(/\./g, '<span class="dot">.</span>')}${subpath.subpath === '.' ? ' <span class="info">[main entry]<\/span>' : ''}</span>
         <div class="right">
           <div class="preload">
             <label for="preload${++subpathCnt}">Preload</label>
@@ -81,7 +81,7 @@ async function loadAndInjectMetadata ({ name, version }) {
       const depEl = getDepEl(name);
       if (!depEl)
         return;
-      depEl.querySelector('select-box.new-export .options').innerHTML = exports.map(e => `<div class="option"><span>${e}${e === '.' ? ' <span class="info">[main]</span>' : ''}</span></div>`).join('\n');
+      depEl.querySelector('select-box.new-export .options').innerHTML = exports.map(e => `<div class="option"><span>${e}${e === '.' ? ' <span class="info">[main entry]</span>' : ''}</span></div>`).join('\n');
       depEl.querySelector('select-box.new-export').className = 'new-export borderless';
     })
   ]);
@@ -123,7 +123,7 @@ export function onDepChange (listener) {
 }
 
 function sanitizeExport (option) {
-  return option.replace(/ (<span class="info">)?\[main\](<\/span>)?$/, '');
+  return option.replace(/ (<span class="info">)?\[main entry\](<\/span>)?$/, '');
 }
 
 function getSubpathInfo (subpathEl) {

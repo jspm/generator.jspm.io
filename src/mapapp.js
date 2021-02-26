@@ -3,7 +3,7 @@ import './select.js';
 import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
-import { hashToState, stateToHash } from './statehash.js';
+import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
 import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
 
@@ -36,7 +36,7 @@ const htmlTemplate = ({ boilerplate, title, scripts, map, mode, preloads, minify
   }${
     boilerplate && !minify && mode !== MODE_SYSTEM ? `\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
       `import * as ${getIdentifier(specifier)} from "${specifier}";`
-    ).join(nl + '  ')}${nl}${nl}  // Write main module code here, or as a separate file with a "src" attribute on the module script.\n</script>` : ''
+    ).join(nl + '  ')}${nl}${nl}  // Write main module code here, or as a separate file with a "src" attribute on the module script.${nl}  console.log(${Object.keys(map.imports).map(getIdentifier).join(', ')});\n</script>` : ''
   }${
     boilerplate && !minify && mode === MODE_SYSTEM ? `
 <!--
@@ -110,13 +110,12 @@ class ImportMapApp {
       else
         download(this.code, this.state.name + (this.state.output.json ? '.json' : '.html'));
     });
-    document.querySelector('#btn-copy-share').addEventListener('click', () => {
+    document.querySelector('#btn-copy-share').addEventListener('click', async () => {
       if (!this.code) {
         toast('Nothing to copy.');
       }
       else {
-        copyToClipboard(location.href)
-        toast('Share URL copied to clipboard.');
+        window.open(`https://jspm.org/sandbox${await getSandboxHash(this.code)}`, '_blank');
       }
     });
     document.querySelector('#map-mode').addEventListener('change', e => {

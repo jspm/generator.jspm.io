@@ -102,6 +102,7 @@ export async function resolvePkg (depStr) {
 }
 
 export async function getVersions (name) {
+  // const res = await fetch(`https://npmlookup.jspm.io/${encodeURIComponent(name)}`);
   const res = await fetch(`https://restless-dawn-d95f.gadev.workers.dev/${encodeURIComponent(name)}`);
   if (!res.ok) {
     toast(`Error: Unable to get version list for ${name} (${res.status})`);

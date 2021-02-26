@@ -137,3 +137,7 @@ export async function hashToState (hash) {
   const gzipped = Buffer.concat([gzipPrefix, Buffer.from(hash.slice(1), 'base64'), gzipSuffix]);
   return decompressState(zlib.gunzipSync(gzipped));
 }
+
+export async function getSandboxHash (code) {
+  return '#' + zlib.gzipSync(Buffer.from(code)).toString('base64');
+}

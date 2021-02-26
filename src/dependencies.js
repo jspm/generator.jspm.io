@@ -152,6 +152,12 @@ function fromPkgStr (pkg) {
   return { name, version, subpath };
 }
 
+function removeSubpath (subpathEl) {
+  const pkgStr = toPkgStr(getSubpathInfo(subpathEl));
+  subpathEl.parentNode.removeChild(subpathEl);
+  depsListener(deps = deps.filter(([dep]) => dep !== pkgStr));
+}
+
 function expandRemoveHandler (e) {
   if (e.target.className === 'expand' || e.target.className === 'main' || e.target.className === 'name' || e.target.className === 'right' && e.target.parentNode.className === 'main') {
     const dep = e.target.className === 'main' ? e.target.parentNode : e.target.parentNode.parentNode;
@@ -170,10 +176,7 @@ function expandRemoveHandler (e) {
       depsListener(deps = deps.filter(([dep]) => !dep.startsWith(name + '@')));
     }
     else if (e.target.parentNode.parentNode.className === 'subpath') {
-      const subpathEl = e.target.parentNode.parentNode;
-      const pkgStr = toPkgStr(getSubpathInfo(subpathEl));
-      subpathEl.parentNode.removeChild(subpathEl);
-      depsListener(deps = deps.filter(([dep]) => dep !== pkgStr));
+      removeSubpath(e.target.parentNode.parentNode);
     }
   }
 }
@@ -222,12 +225,13 @@ function htmlToElement (html) {
   return node;
 }
 
-function injectDep (name, version, subpath) {
+async function injectDep (name, version, subpath, validate) {
   const newDep = subpath ? [toPkgStr({ name, version, subpath }), true] : null;
 
   if (newDep && deps.some(([dep]) => dep === newDep[0]))
     return;
 
+  let subpathEl;
   const depEl = getDepEl(name);
   if (depEl) {
     const info = getDepInfo(depEl);
@@ -243,7 +247,7 @@ function injectDep (name, version, subpath) {
       const pkgStr = name + '@' + version;
       const subpathStartIndex = deps.findIndex(([dep]) => dep === pkgStr || dep.startsWith(pkgStr + '/'));
       const subpathIndex = insertAt - subpathStartIndex;
-      const subpathEl = htmlToElement(renderSubpath({ subpath, preload: true }));
+      subpathEl = htmlToElement(renderSubpath({ subpath, preload: true }));
       depEl.querySelector('.subpaths').insertBefore(subpathEl, depEl.querySelectorAll('div.subpath')[subpathIndex]);
     }
   }
@@ -255,11 +259,21 @@ function injectDep (name, version, subpath) {
     const insertAt = deps.indexOf(newDep);
 
     const depEl = htmlToElement(renderDep({ name, version, subpaths: newDep ? [{ subpath, preload: true }] : [] }));
+    subpathEl = depEl.querySelector('.subpath');
     progressBar.addWork();
     document.querySelector('.dependencies-container').insertBefore(depEl, document.querySelectorAll('.dependency')[insertAt]);
     depEl.addEventListener('click', expandRemoveHandler);
     depEl.addEventListener('change', changeHandler);
     loadAndInjectMetadata({ name, version });
+  }
+
+  if (validate) {
+    const exports = await getExports(name, version);
+    if (!exports.includes(subpath)) {
+       toast(`"${subpath}" is not a valid export of ${name}@${version}. Select a valid export from the list via Add Package Export.`);
+       removeSubpath(subpathEl);
+       return;
+    }
   }
 
   depsListener(deps);
@@ -291,7 +305,7 @@ document.querySelector('.add input').addEventListener('keydown', async e => {
       if (!name)
         return;
     }
-    injectDep(name, version, subpath);
+    injectDep(name, version, subpath, true);
     e.target.value = '';
   }
 });

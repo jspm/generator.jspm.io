@@ -26,5 +26,10 @@ export function download (text, filename) {
 }
 
 export function getIdentifier (str) {
-  return str.split('/').pop().match(/^\w+/)[0];
+  return str.split(/[/-]/).map((p, i) => {
+    const [match] = p.match(/^\w+/) || [];
+    if (!match)
+      return '';
+    return i === 0 ? match : match[0].toUpperCase() + match.slice(1);
+  }).join('');
 }

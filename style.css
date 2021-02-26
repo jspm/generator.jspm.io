@@ -419,6 +419,12 @@ select-box .options {
   position: static;
   padding-left: 10px;
 }
+.sidebar .dependencies div.subpath.add-export {
+  visibility: hidden;
+}
+.sidebar .dependencies .dependency:hover div.subpath.add-export {
+  visibility: visible;
+}
 .sidebar .dependencies div.subpath.add-export .selected {
   color: #aaaaaa;
   text-decoration: underline;

@@ -144,7 +144,7 @@ select-box {
   color: #787878;
   border-radius: 20px;
   border: none;
-  box-shadow: 0.2px 0.2px 1px rgba(0, 0, 0, 0.6);
+  box-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.6);
   height: 20px;
   cursor: pointer;
   position: relative;
@@ -164,7 +164,7 @@ select-box:hover, select-box.expanded {
   background-color: #ededed;
 }
 select-box.borderless:hover, select-box.borderless.expanded  {
-  box-shadow: 0.2px 0.2px 1px rgba(0, 0, 0, 0.6);
+  box-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.6);
   background-size: 12px 12px;
 }
 .options {
@@ -177,7 +177,7 @@ select-box.borderless:hover, select-box.borderless.expanded  {
   overflow-y: auto;
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0.2px 0.2px 1px rgba(14, 13, 13, 0.6);
+  box-shadow: 1px 1px 4px rgba(14, 13, 13, 0.6);
 }
 select-box .selected {
   padding-right: 5px;
@@ -419,18 +419,21 @@ select-box .options {
   position: static;
   padding-left: 10px;
 }
-.sidebar .dependencies div.subpath.add-export {
-  visibility: hidden;
-}
-.sidebar .dependencies .dependency:hover div.subpath.add-export {
-  visibility: visible;
-}
 .sidebar .dependencies div.subpath.add-export .selected {
   color: #aaaaaa;
   text-decoration: underline;
 }
-.sidebar .dependencies div.subpath.add-export select-box:hover .selected {
+.sidebar .dependencies div.subpath.add-export select-box:hover .selected,
+.sidebar .dependencies div.subpath.add-export select-box.expanded .selected {
   color: #787878;
+}
+.sidebar .dependencies div.subpath.add-export select-box {
+  transition: 0.3s ease opacity;
+  opacity: 0;
+}
+.sidebar .dependencies .dependency:hover div.subpath.add-export select-box,
+.sidebar .dependencies .dependency div.subpath.add-export select-box.expanded {
+  opacity: 1;
 }
 .sidebar .dependencies .dependency .name {
   user-select: none;
@@ -708,8 +711,8 @@ code .keyword, .cm-s-default .cm-keyword {
   color: #000;
 }
 
-@media screen and (max-width: 1800px),
-screen and (max-device-width: 1800px) {
+@media screen and (max-width: 1500px),
+screen and (max-device-width: 1500px) {
   .buttonbar {
     left: 0;
     width: 100%;
@@ -728,25 +731,25 @@ screen and (max-device-width: 1800px) {
 }
 @media screen and (max-width: 1350px),
 screen and (max-device-width: 1350px) {
-  .buttonbar .button-box:nth-last-child(2) {
+  .buttonbar .button-box:nth-child(6) {
     display: none;
   }
 }
 @media screen and (max-width: 1250px),
 screen and (max-device-width: 1250px) {
-  .buttonbar .button-box:nth-last-child(3) {
+  .buttonbar .button-box:nth-child(5) {
     display: none;
   }
 }
 @media screen and (max-width: 1130px),
 screen and (max-device-width: 1130px) {
-  .buttonbar .button-box:nth-last-child(4) {
+  .buttonbar .button-box:nth-child(4) {
     display: none;
   }
 }
 @media screen and (max-width: 1000px),
 screen and (max-device-width: 1000px) {
-  .buttonbar .button-box:nth-last-child(5) {
+  .buttonbar .button-box:nth-child(3) {
     display: none;
   }
 }

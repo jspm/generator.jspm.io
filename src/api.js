@@ -42,6 +42,7 @@ export async function getMap (deps, integrity, preload, env) {
   const base = new URL('/', location);
 
   const traceMap = new TraceMap(base, {
+    stdlib: '@jspm/core@2',
     lock: false,
     env: Object.keys(env).filter(name => env[name])
   });

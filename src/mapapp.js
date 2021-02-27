@@ -21,8 +21,8 @@ const htmlTemplate = ({ boilerplate, title, scripts, map, system, preloads, mini
     mapType = 'importmap';
   }
   const injection = `${
-    scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, defer, module, comment }) =>
-      `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${defer ? 'defer ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}></script>${hidden ? ' -->' : ''}`
+    scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, async, module, comment }) =>
+      `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${async ? 'async ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}></script>${hidden ? ' -->' : ''}`
     ).join(nl + nl) : ''
   }${nl}${
     map ? `\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''

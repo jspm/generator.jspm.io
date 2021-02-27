@@ -505,7 +505,7 @@
     for (const mutation of mutations) {
       if (mutation.type !== 'childList') continue;
       for (const node of mutation.addedNodes) {
-        if (node.tagName === 'SCRIPT')
+        if (node.tagName === 'SCRIPT' && node.type)
           processScript(node, !firstTopLevelProcess);
       }
     }
@@ -523,7 +523,7 @@
     if (script.type.startsWith('module')) {
       await topLevelLoad(script.src || `${baseUrl}?${id++}`, !script.src && script.innerHTML, !shim).catch(onerror);
     }
-    else {
+    else if (script.type.startsWith('importmap')) {
       importMapPromise = importMapPromise.then(async () => {
         if (script.src || dynamic)
           importMapSrcOrLazy = true;

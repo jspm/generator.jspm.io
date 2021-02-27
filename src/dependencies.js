@@ -123,7 +123,7 @@ export function onDepChange (listener) {
 }
 
 function sanitizeExport (option) {
-  return option.replace(/ (<span class="info">)?\[main entry\](<\/span>)?$/, '');
+  return option.replace(/^(<span class="dot">)?\.?(<\/span>)? ?(<span class="info">)?\[main entry\](<\/span>)?$/, '.');
 }
 
 function getSubpathInfo (subpathEl) {

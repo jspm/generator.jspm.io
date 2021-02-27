@@ -9,9 +9,10 @@ let esModuleShimsIntegrity;
 export async function getESModuleShimsScript (integrity) {
   // = resolvePkg + integrity()
   return [{
-    url: 'https://ga.jspm.io/npm:es-module-shims@0.9.0/dist/es-module-shims.min.js',
+    defer: true,
+    url: 'https://ga.jspm.io/npm:es-module-shims@0.10.0/dist/es-module-shims.min.js',
     integrity: '',
-    defer: true
+    comment: 'ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+)'
   }];
 }
 
@@ -20,12 +21,14 @@ export async function getSystemScripts (integrity) {
   // = resolvePkg + integrity()
   return [
     {
+      comment: 'SystemJS: Supports loading modules performantly in all browsers back to IE11 (depending on library support)',
       url: 'https://ga.system.jspm.io/npm:systemjs@6.8.3/dist/s.min.js',
       integrity: ''
     },
     {
-      hidden: 'Uncomment the SystemJS Babel script below to use SystemJS in a dev mode\nto process ES modules as System modules directly in the browser.',
-      url: 'https://ga.jspm.io/npm:systemjs-babel@0.3.1/dist/systemjs-babel.js',
+      hidden: true,
+      comment: 'Uncomment SystemJS Babel below for an in-browser ES Module / TypeScript / JSX dev workflow.',
+      url: 'https://ga.system.jspm.io/npm:systemjs-babel@0.3.1/dist/systemjs-babel.js',
       integrity: ''
     }
   ];
@@ -118,5 +121,5 @@ export async function getExports (name, version) {
   if (!pcfg)
     toast(`Error: Unable to load package configuration for ${name}@${version}.`);
   else
-    return Object.keys(pcfg.exports).filter(expt => !expt.endsWith('!cjs')).sort();
+    return Object.keys(pcfg.exports).filter(expt => !expt.endsWith('!cjs') && !expt.endsWith('/') && expt.indexOf('*') === -1).sort();
 }

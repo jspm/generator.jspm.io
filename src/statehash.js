@@ -10,13 +10,12 @@ const ENV_DEVELOPMENT = 0x1;
 const ENV_PRODUCTION = 0x2;
 const ENV_BROWSER = 0x4;
 const ENV_NODE = 0x8;
-const OUTPUT_MODE_SHIFT = 4;
-const OUTPUT_MODE_MASK = 0x30;
-const OUTPUT_BOILERPLATE = 0x40;
-const OUTPUT_MINIFY = 0x80;
-const OUTPUT_JSON = 0x100;
-const OUTPUT_INTEGRITY = 0x200;
-const OUTPUT_PRELOAD = 0x400;
+const OUTPUT_SYSTEM = 0x10;
+const OUTPUT_BOILERPLATE = 0x20;
+const OUTPUT_MINIFY = 0x40;
+const OUTPUT_JSON = 0x80;
+const OUTPUT_INTEGRITY = 0x100;
+const OUTPUT_PRELOAD = 0x200;
 
 const BIT1 = 0x1;
 const BIT2 = 0x2;
@@ -33,7 +32,7 @@ function compressState (state) {
     state.env.production * ENV_PRODUCTION |
     state.env.browser * ENV_BROWSER |
     state.env.node * ENV_NODE |
-    (state.output.mode << OUTPUT_MODE_SHIFT) |
+    state.output.system * OUTPUT_SYSTEM |
     state.output.boilerplate * OUTPUT_BOILERPLATE |
     state.output.minify * OUTPUT_MINIFY |
     state.output.json * OUTPUT_JSON |
@@ -103,7 +102,7 @@ function decompressState (buffer) {
       node: bitField & ENV_NODE ? true : false
     },
     output: {
-      mode: (bitField & OUTPUT_MODE_MASK) >> OUTPUT_MODE_SHIFT,
+      system: bitField & OUTPUT_SYSTEM ? true : false,
       boilerplate: bitField & OUTPUT_BOILERPLATE ? true : false,
       minify: bitField & OUTPUT_MINIFY ? true : false,
       json: bitField & OUTPUT_JSON ? true : false,

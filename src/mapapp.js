@@ -7,44 +7,36 @@ import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
 import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
 
-const htmlTemplate = ({ boilerplate, title, scripts, map, mode, preloads, minify, integrity: useIntegrity }) => {
+const htmlTemplate = ({ boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
   const nl = minify ? '' : '\n';
   let scriptType, linkType, mapType;
-  switch (mode) {
-    case MODE_NATIVE:
-      scriptType = 'module';
-      linkType = 'script';
-      mapType = 'importmap';
-    break;
-    case MODE_ESMS:
-      scriptType = 'module-shim';
-      linkType = 'fetch';
-      mapType = 'importmap-shim';
-    break;
-    case MODE_SYSTEM:
-      scriptType = 'systemjs-module';
-      linkType = 'script';
-      mapType = 'systemjs-importmap';
-    break;
+  if (system) {
+    scriptType = 'systemjs-module';
+    linkType = 'script';
+    mapType = 'systemjs-importmap';
+  }
+  else {
+    scriptType = 'module';
+    linkType = 'script';
+    mapType = 'importmap';
   }
   const injection = `${
-    scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, defer }) =>
-      `${hidden ? `<!--\n  ${hidden.split('\n').join('\n  ')}\n-->\n<!-- ` : ''}<script ${defer ? 'defer ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}></script>${hidden ? ' -->' : ''}`
-    ).join(nl) : ''
-  }${
+    scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, defer, module, comment }) =>
+      `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${defer ? 'defer ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}></script>${hidden ? ' -->' : ''}`
+    ).join(nl + nl) : ''
+  }${nl}${
     map ? `\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
   }${
-    boilerplate && !minify && mode !== MODE_SYSTEM ? `\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
+    boilerplate && !minify && !system ? `\n\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
       `import * as ${getIdentifier(specifier)} from "${specifier}";`
     ).join(nl + '  ')}${nl}${nl}  // Write main module code here, or as a separate file with a "src" attribute on the module script.${nl}  console.log(${Object.keys(map.imports).map(getIdentifier).join(', ')});\n</script>` : ''
   }${
-    boilerplate && !minify && mode === MODE_SYSTEM ? `
-<!--
-  Create an app.js file, then either use SystemJS Babel for an in-browser dev mode, or compile into the SystemJS module
-  format using the Babel or TypeScript "system" output mode (always needed for production).
-  See the JSPM documentation for more info - https://jspm.org/maps#system.
--->
-<script type="${scriptType}" src="app.js"></script>` : ''
+    boilerplate && !minify && system ? `\n\n<!-- For testing: -->\n<script>${nl}  ${Object.keys(map.imports).map(specifier =>
+  `System.import("${specifier}").then(m => console.log(m));`
+).join(nl + '  ')}\n</script>` : ''
+  }${
+    boilerplate && !minify && system ? `\n\n<!-- Load an app.js file written in the "system" module format output (via RollupJS / Babel / TypeScript) -->
+<!-- <script type="${scriptType}" src="app.js"></script> -->` : ''
   }${
     preloads ? '\n' + preloads.map(({ url, integrity }) =>
       `<link rel="preload" as="${linkType}" href="${url}" crossorigin="anonymous"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
@@ -63,29 +55,6 @@ const htmlTemplate = ({ boilerplate, title, scripts, map, mode, preloads, minify
 </body>\n</html>
 `;
 };
-
-function modeToName (mode) {
-  switch (mode) {
-    case MODE_NATIVE:
-      return 'Native Modules';
-    case MODE_ESMS:
-      return 'ES Module Shims';
-    case MODE_SYSTEM:
-      return 'SystemJS';
-  }
-  throw new Error('Internal Error.');
-}
-function nameToMode (name) {
-  switch (name) {
-    case 'Native Modules':
-      return MODE_NATIVE;
-    case 'ES Module Shims':
-      return MODE_ESMS;
-    case 'SystemJS':
-      return MODE_SYSTEM;
-  }
-  throw new Error('Internal Error.');
-}
 
 class ImportMapApp {
   constructor (initState) {
@@ -116,13 +85,6 @@ class ImportMapApp {
       }
       else {
         window.open(`https://jspm.org/sandbox${await getSandboxHash(this.code)}`, '_blank');
-      }
-    });
-    document.querySelector('#map-mode').addEventListener('change', e => {
-      const mode = nameToMode(e.detail.new);
-      if (mode !== this.state.output.mode) {
-        this.state.output.mode = mode;
-        this.renderMap();
       }
     });
     document.querySelector('.title input').addEventListener('change', e => {
@@ -221,8 +183,6 @@ class ImportMapApp {
       outputOption.checked = checked;
     }
 
-    document.querySelector('#map-mode').set(modeToName(this.state.output.mode));
-
     this.$progressBar.addWork();
     
     try {
@@ -231,9 +191,9 @@ class ImportMapApp {
 
       let { map, preloads } = await getMap(this.state.deps, this.state.output.integrity, this.state.output.preload, this.state.env);
 
-      const scripts = this.state.output.mode === MODE_SYSTEM ? await getSystemScripts(this.state.output.integrity) : this.state.output.mode === MODE_ESMS ? await getESModuleShimsScript(this.state.output.integrity) : null;
+      const scripts = this.state.output.system ? await getSystemScripts(this.state.output.integrity) : await getESModuleShimsScript(this.state.output.integrity);
 
-      if (this.state.output.mode === MODE_SYSTEM) {
+      if (this.state.output.system) {
         function systemReplace (url) {
           return url.replace(/^https:\/\/ga\.jspm\.io\//g, 'https://ga.system.jspm.io/');
         }
@@ -261,7 +221,7 @@ class ImportMapApp {
           boilerplate: this.state.output.boilerplate,
           title: this.state.name,
           scripts,
-          mode: this.state.output.mode,
+          system: this.state.output.system,
           map,
           preloads: this.state.output.preload ? preloads : null,
           minify: this.state.output.minify,
@@ -287,8 +247,8 @@ class ImportMapApp {
     if (outputOption === 'json' && e.target.checked) {
       document.querySelector('#map-boilerplate').checked = false;
       this.state.output.boilerplate = false;
-      document.querySelector('#map-integrity').checked = false;
-      this.state.output.integrity = false;
+      // document.querySelector('#map-integrity').checked = false;
+      // this.state.output.integrity = false;
     }
     if ((outputOption === 'boilerplate' || outputOption === 'integrity') && e.target.checked) {
       document.querySelector('#map-json').checked = false;
@@ -300,6 +260,7 @@ class ImportMapApp {
     this.renderMap();
   }
   envChange (e) {
+    console.log(e);
     const condition = e.target.id.slice(4);
     const value = e.target.checked;
     switch (condition) {
@@ -315,8 +276,8 @@ class ImportMapApp {
 
       case 'browser':
         if (value) {
-          document.querySelector('#env-deno').checked = false;
-          this.state.env.deno = false;
+          // document.querySelector('#env-deno').checked = false;
+          // this.state.env.deno = false;
           document.querySelector('#env-node').checked = false;
           this.state.env.node = false;
         }
@@ -326,8 +287,8 @@ class ImportMapApp {
         if (value) {
           document.querySelector('#env-browser').checked = false;
           this.state.env.browser = false;
-          document.querySelector('#env-deno').checked = false;
-          this.state.env.deno = false;
+          // document.querySelector('#env-deno').checked = false;
+          // this.state.env.deno = false;
         }
       break;
 
@@ -355,10 +316,6 @@ class ImportMapApp {
   }
 }
 
-const MODE_NATIVE = 0;
-const MODE_ESMS = 1;
-const MODE_SYSTEM = 2;
-
 new ImportMapApp({
   name: 'Untitled',
   deps: [],
@@ -369,7 +326,7 @@ new ImportMapApp({
     node: false
   },
   output: {
-    mode: MODE_NATIVE,
+    system: false,
     boilerplate: true,
     minify: false,
     json: false,

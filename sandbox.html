@@ -12,9 +12,10 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css">
 <link rel="preload" as="font" href="/sourcesans-light.woff2" type="font/woff2" crossorigin="anonymous">
-<!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-40327700-1"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-40327700-2');</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-40327700-1"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-40327700-2');</script> -->
 
-<body>
+<body class="topbuttons">
   <div class="topbar">
     <a style="display: block" href="/"><div class="logobox" href="/"></div><h1 class="logo">JSPM.IO</h1></a>
     <div class="title">
@@ -75,14 +76,14 @@
     <pre><code></code></pre>
   </div>
   <div class="buttonbar">
-    <select-box class="up" id="map-mode" title="Import map module format">
-      <div class="selected"><span>Native Modules</span></div>
-      <div class="options">
-        <div class="option" title="Native ES module import maps - only works in Chrome 91+, the only browser which supports import maps."><span>Native Modules</span></div>
-        <div class="option" title="Output an ES Module Shims import map, supported in all browsers that support ES modules (most browsers)."><span>ES Module Shims</span></div>
-        <div class="option" title="Output a SystemJS import map, SystemJS requires its own 'system' module format but works in all browsers back to IE11."><span>SystemJS</span></div>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-system" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
       </div>
-    </select-box>
+      <label class="label" for="map-system" title="Create an import map of System modules to work in legacy browsers with SystemJS.">SystemJS Import Map</label>
+    </div>
     <div class="button-box">
       <div class="button r">
         <input type="checkbox" id="map-boilerplate" class="checkbox" checked>
@@ -124,6 +125,15 @@
       <label class="label" for="map-preload" title="Inject link preload tags for dependencies.">Preload</label>
     </div> -->
     <div class="end">
+      <button id="btn-copy" type="button" title="Copy the generated map above to the clipboard.">
+        <svg width="13" height="15" viewBox="0 0 13 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="top: 0.2em;">
+          <path d="M11.8492 11.5902H3C2.72386 11.5902 2.5 11.3663 2.5 11.0902V1.16773C2.5 0.891583 2.72386 0.667725 3 0.667725H8.94596C9.10695 0.667725 9.2581 0.745246 9.35203 0.875998L12.2553 4.91728C12.3164 5.00229 12.3492 5.10433 12.3492 5.209V11.0902C12.3492 11.3663 12.1254 11.5902 11.8492 11.5902Z" fill="#FBFBFB" stroke="#7B7B7B"/>
+          <path d="M8.45001 1.10001V4.60001C8.45001 5.15229 8.89773 5.60001 9.45001 5.60001H12.45" stroke="#7B7B7B"/>
+          <path d="M9.84924 13.5902H1C0.723857 13.5902 0.5 13.3663 0.5 13.0902V3.16773C0.5 2.89158 0.723858 2.66772 1 2.66772H6.94596C7.10695 2.66772 7.2581 2.74525 7.35203 2.876L10.2553 6.91728C10.3164 7.00229 10.3492 7.10433 10.3492 7.209V13.0902C10.3492 13.3663 10.1254 13.5902 9.84924 13.5902Z" fill="#FBFBFB" stroke="#7B7B7B"/>
+          <path d="M6.45001 3.10001V6.60001C6.45001 7.15229 6.89773 7.60001 7.45001 7.60001H10.45" stroke="#7B7B7B"/>
+        </svg>  
+        Copy
+      </button>
       <button id="btn-copy-share" type="button" title="Copy the shareable URL of this page.">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6.39198 0.608017C6.1755 0.391531 5.8245 0.391531 5.60802 0.608017L2.08017 4.13587C1.86368 4.35235 1.86368 4.70335 2.08017 4.91983C2.29665 5.13632 2.64765 5.13632 2.86413 4.91983L6 1.78397L9.13587 4.91983C9.35235 5.13632 9.70335 5.13632 9.91983 4.91983C10.1363 4.70335 10.1363 4.35235 9.91983 4.13587L6.39198 0.608017ZM6.55435 9L6.55435 1L5.44565 1L5.44565 9L6.55435 9Z" fill="#7B7B7B"/>
@@ -138,19 +148,11 @@
         </svg>
         Download
       </button>
-      <button id="btn-copy" type="button" title="Copy the generated map above to the clipboard.">
-        <svg width="13" height="15" viewBox="0 0 13 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="top: 0.2em;">
-          <path d="M11.8492 11.5902H3C2.72386 11.5902 2.5 11.3663 2.5 11.0902V1.16773C2.5 0.891583 2.72386 0.667725 3 0.667725H8.94596C9.10695 0.667725 9.2581 0.745246 9.35203 0.875998L12.2553 4.91728C12.3164 5.00229 12.3492 5.10433 12.3492 5.209V11.0902C12.3492 11.3663 12.1254 11.5902 11.8492 11.5902Z" fill="#FBFBFB" stroke="#7B7B7B"/>
-          <path d="M8.45001 1.10001V4.60001C8.45001 5.15229 8.89773 5.60001 9.45001 5.60001H12.45" stroke="#7B7B7B"/>
-          <path d="M9.84924 13.5902H1C0.723857 13.5902 0.5 13.3663 0.5 13.0902V3.16773C0.5 2.89158 0.723858 2.66772 1 2.66772H6.94596C7.10695 2.66772 7.2581 2.74525 7.35203 2.876L10.2553 6.91728C10.3164 7.00229 10.3492 7.10433 10.3492 7.209V13.0902C10.3492 13.3663 10.1254 13.5902 9.84924 13.5902Z" fill="#FBFBFB" stroke="#7B7B7B"/>
-          <path d="M6.45001 3.10001V6.60001C6.45001 7.15229 6.89773 7.60001 7.45001 7.60001H10.45" stroke="#7B7B7B"/>
-        </svg>  
-        Copy
-      </button>
     </div>
   </div>
   <div class="help">WTF?</div>
 </body>
+
 
 <script type="importmap">
 {
@@ -204,3 +206,4 @@
 }
 </script>
 <script type="module" src="src/mapapp.js"></script>
+<script type="module" src="es-module-shims.js"></script>

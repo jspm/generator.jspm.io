@@ -326,7 +326,7 @@ document.querySelector('.add input').addEventListener('keydown', async e => {
       if (!name)
         return;
     }
-    injectDep(name, version, subpath, true);
+    injectDep(name.toLowerCase(), version, subpath, true);
     e.target.value = '';
   }
 });

@@ -64,6 +64,19 @@ function getDepEl (name) {
   }
 }
 
+async function loadAndInjectExports ({ name, version }) {
+  const depEl = getDepEl(name);
+  if (!depEl)
+    return;
+  depEl.querySelector('select-box.new-export').className = 'new-export borderless loading';
+  depEl.querySelector('select-box.new-export .options').innerHTML = '';
+  const exports = await getExports(name, version);
+  if (!exports)
+    return;
+  depEl.querySelector('select-box.new-export .options').innerHTML = exports.map(e => `<div class="option"><span>${e}${e === '.' ? ' <span class="info">[main entry]</span>' : ''}</span></div>`).join('\n');
+  depEl.querySelector('select-box.new-export').className = 'new-export borderless';
+}
+
 async function loadAndInjectMetadata ({ name, version }) {
   await Promise.all([
     getVersions(name).then(versions => {
@@ -75,15 +88,7 @@ async function loadAndInjectMetadata ({ name, version }) {
       depEl.querySelector('select-box.version .options').innerHTML = versions.map(v => `<div class="option"><span>${v}</span></div>`).join('\n');
       depEl.querySelector('select-box.version').className = 'version borderless unsized';
     }),
-    getExports(name, version).then(exports => {
-      if (!exports)
-        return;
-      const depEl = getDepEl(name);
-      if (!depEl)
-        return;
-      depEl.querySelector('select-box.new-export .options').innerHTML = exports.map(e => `<div class="option"><span>${e}${e === '.' ? ' <span class="info">[main entry]</span>' : ''}</span></div>`).join('\n');
-      depEl.querySelector('select-box.new-export').className = 'new-export borderless';
-    })
+    loadAndInjectExports({ name, version })
   ]);
   progressBar.completeWork();
 }
@@ -197,6 +202,7 @@ function changeHandler (e) {
     const { name } = getDepInfo(e.target.parentNode.parentNode.parentNode);
     updateVersion(name, e.detail.old, e.detail.new);
     depsListener(deps);
+    loadAndInjectExports({ name, version: e.detail.new });
   }
   else if (classes.includes('new-export')) {
     e.target.set('Add Package Export');

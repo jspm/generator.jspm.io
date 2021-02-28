@@ -7,7 +7,7 @@ import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
 import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
 
-const htmlTemplate = ({ boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
+const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
   const nl = minify ? '' : '\n';
   let scriptType, linkType, mapType;
   if (system) {
@@ -25,9 +25,9 @@ const htmlTemplate = ({ boilerplate, title, scripts, map, system, preloads, mini
       `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${async ? 'async ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}></script>${hidden ? ' -->' : ''}`
     ).join(nl + nl) : ''
   }${nl}${
-    map ? `\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
+    map ? `\n<!-- Edit URL: ${editUrl} -->\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
   }${
-    boilerplate && !minify && !system ? `\n\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
+    boilerplate && !minify && !system && Object.keys(map.imports).length ? `\n\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
       `import * as ${getIdentifier(specifier)} from "${specifier}";`
     ).join(nl + '  ')}${nl}${nl}  // Write main module code here, or as a separate file with a "src" attribute on the module script.${nl}  console.log(${Object.keys(map.imports).map(getIdentifier).join(', ')});\n</script>` : ''
   }${
@@ -218,6 +218,7 @@ class ImportMapApp {
         this.setCode(JSON.stringify(map, null, this.state.output.minify ? 0 : 2));
       else
         this.setCode(htmlTemplate({
+          editUrl: location.href,
           boilerplate: this.state.output.boilerplate,
           title: this.state.name,
           scripts,

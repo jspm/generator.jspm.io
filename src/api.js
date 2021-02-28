@@ -1,9 +1,19 @@
-import TraceMap from '../lib/tracemap/tracemap.js';
-import { Semver } from 'sver';
-import resolver from '../lib/install/resolver.js';
 import { toast } from './toast.js';
-import { computeIntegrity } from '../lib/common/integrity.js';
-import { toPackageTarget, isPackageTarget } from '../lib/install/package.js';
+
+let TraceMap, Semver, resolver, toPackageTarget, isPackageTarget;
+const initPromise = (async () => {
+  [
+    { default: TraceMap },
+    { Semver },
+    { default: resolver },
+    { toPackageTarget, isPackageTarget }
+  ] = await Promise.all([
+    import('../lib/tracemap/tracemap.js'),
+    import('sver'),
+    import('../lib/install/resolver.js'),
+    import('../lib/install/package.js')
+  ]);
+})();
 
 let esModuleShimsIntegrity;
 export async function getESModuleShimsScript (integrity) {
@@ -35,6 +45,7 @@ export async function getSystemScripts (integrity) {
 }
 
 export async function getMap (deps, integrity, preload, env) {
+  await initPromise;
   // deps = [[name@version/subpath, preload?], ...]
   const modules = deps.map(dep => dep[0]);
 
@@ -85,6 +96,7 @@ export async function getMap (deps, integrity, preload, env) {
 }
 
 export async function resolvePkg (depStr) {
+  await initPromise;
   if (depStr === 'err')
     return { err: `Unable to find package ${depStr}` };
   let target, subpath, alias;
@@ -106,6 +118,7 @@ export async function resolvePkg (depStr) {
 }
 
 export async function getVersions (name) {
+  await initPromise;
   const res = await fetch(`https://npmlookup.jspm.io/${encodeURIComponent(name)}`);
   if (!res.ok) {
     toast(`Error: Unable to get version list for ${name} (${res.status})`);
@@ -116,6 +129,7 @@ export async function getVersions (name) {
 }
 
 export async function getExports (name, version) {
+  await initPromise;
   const pcfg = await resolver.getPackageConfig(`https://ga.jspm.io/npm:${name}@${version}/`);
   if (!pcfg)
     toast(`Error: Unable to load package configuration for ${name}@${version}.`);

@@ -16,7 +16,7 @@
 
 <body class="topbuttons">
   <div class="topbar">
-    <a style="display: block" href="/"><div class="logobox" href="/"></div><h1 class="logo">JSPM.IO</h1></a>
+    <a style="display: block" href="/"><div class="logobox" href="https://jspm.org/"></div><h1 class="logo">JSPM.IO</h1></a>
     <div class="title">
       <h1>Import Map Generator /&nbsp;</h1>
       <input class="text" type="text" value=""/>
@@ -156,6 +156,7 @@
 <script type="importmap">
 {
   "imports": {
+    "app": "./src/mapapp.js",
     "@iarna/toml": "https://ga.jspm.io/npm:@iarna/toml@3.0.0/toml.js",
     "ansi-styles": "https://ga.jspm.io/npm:ansi-styles@4.3.0/index.js",
     "buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
@@ -205,4 +206,4 @@
 }
 </script>
 <script async src="https://ga.jspm.io/npm:es-module-shims@0.10.1/dist/es-module-shims.js"></script>
-<script type="module" src="src/mapapp.js"></script>
+<script type="module">import 'app'</script>

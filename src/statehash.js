@@ -129,7 +129,7 @@ export async function stateToHash (state) {
       throw new Error('Internal Error.');
     }
   }
-  return '#' + gzipped.slice(gzipPrefix.length, -gzipSuffix.length).toString('base64');
+  return '#' + gzipped.slice(gzipPrefix.length, -gzipSuffix.length).toString('base64').replace(/=+$/, '');
 }
 export async function hashToState (hash) {
   await initPromise;

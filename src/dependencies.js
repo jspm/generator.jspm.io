@@ -319,14 +319,14 @@ document.querySelector('.add input').addEventListener('keydown', async e => {
   if (e.code === 'Enter') {
     const value = e.target.value;
     progressBar.addWork();
-    const { name, version, subpath, err } = await resolvePkg(value);
+    const { name, version, subpath, err } = await resolvePkg(value.trim().toLowerCase());
     progressBar.completeWork();
     if (err) {
       toast('Error: ' + err);
       if (!name)
         return;
     }
-    injectDep(name.toLowerCase(), version, subpath, true);
+    injectDep(name, version, subpath, true);
     e.target.value = '';
   }
 });

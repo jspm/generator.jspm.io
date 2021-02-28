@@ -825,7 +825,7 @@ screen and (max-device-width: 800px) {
     border-top: 1px solid #ededed;
     display: flex;
     left: 0;
-    top: calc(50% - 7em + 3px);
+    top: calc(50% + 3px);
     width: 100%;
   }
   .buttonbar .button-box,
@@ -849,24 +849,27 @@ screen and (max-device-width: 800px) {
   }
   .topbuttons progress-bar.main {
     left: 0;
-    top: calc(50% - 7em + 3px + 3.5em);
+    top: calc(50% + 3px + 3.5em);
     width: 100%;
   }
   .topbuttons .container {
     position: absolute;
     left: 0;
-    top: calc(50% - 7em + 3px + 3.5em);
+    top: calc(50% + 3px + 3.5em);
     width: 100%;
-    height: calc(50% - 8em + 3px);
+    height: calc(50% - 6em + 6px);
   }
   .buttonbar {
     left: 0;
   }
   .sidebar .dependencies {
     width: 100%;
-    height: calc(50% - 7em - 7em);
+    height: calc(50% - 7em);
   }
   .help {
+    display: none;
+  }
+  .env {
     display: none;
   }
 }

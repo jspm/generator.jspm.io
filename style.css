@@ -854,6 +854,9 @@ screen and (max-device-width: 800px) {
     top: calc(50% + 3px + 3.5em);
     width: 100%;
   }
+  .topbuttons .container code {
+    font-size: 9px;
+  }
   .topbuttons .container {
     position: absolute;
     left: 0;

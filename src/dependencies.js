@@ -28,8 +28,8 @@ const renderSubpath = (subpath) => `
       </div>
 `;
 
-const renderDep = opts => `
-  <div class="dependency expanded">
+const renderDep = (opts, collapsed) => `
+  <div class="dependency${collapsed ? '' : ' expanded'}">
     <div class="main">
       <div class="expand"></div>
       <div class="name">${opts.name}</div>
@@ -163,6 +163,15 @@ function removeSubpath (subpathEl) {
   depsListener(deps = deps.filter(([dep]) => dep !== pkgStr));
 }
 
+function collapseAllExcept (el) {
+  for (const depEl of document.querySelectorAll('.dependency')) {
+    if (depEl === el)
+      depEl.className = 'dependency expanded';
+    else
+      depEl.className = 'dependency';
+  }
+}
+
 function expandRemoveHandler (e) {
   if (e.target.className === 'expand' || e.target.className === 'main' || e.target.className === 'name' || e.target.className === 'right' && e.target.parentNode.className === 'main') {
     const dep = e.target.className === 'main' ? e.target.parentNode : e.target.parentNode.parentNode;
@@ -201,8 +210,8 @@ function changeHandler (e) {
     // version change
     const { name } = getDepInfo(e.target.parentNode.parentNode.parentNode);
     updateVersion(name, e.detail.old, e.detail.new);
-    depsListener(deps);
     loadAndInjectExports({ name, version: e.detail.new });
+    depsListener(deps);
   }
   else if (classes.includes('new-export')) {
     e.target.set('Add Package Export');
@@ -234,11 +243,15 @@ function htmlToElement (html) {
 async function injectDep (name, version, subpath, validate) {
   const newDep = subpath ? [toPkgStr({ name, version, subpath }), true] : null;
 
+  const depEl = getDepEl(name);
+
+  if (depEl && validate)
+    collapseAllExcept(depEl);
+
   if (newDep && deps.some(([dep]) => dep === newDep[0]))
     return;
 
   let subpathEl;
-  const depEl = getDepEl(name);
   if (depEl) {
     const info = getDepInfo(depEl);
     if (info.version !== version) {
@@ -268,6 +281,8 @@ async function injectDep (name, version, subpath, validate) {
     subpathEl = depEl.querySelector('.subpath');
     progressBar.addWork();
     document.querySelector('.dependencies-container').insertBefore(depEl, document.querySelectorAll('.dependency')[insertAt]);
+    if (validate)
+      collapseAllExcept(depEl);
     depEl.addEventListener('click', expandRemoveHandler);
     depEl.addEventListener('change', changeHandler);
     loadAndInjectMetadata({ name, version });
@@ -275,7 +290,7 @@ async function injectDep (name, version, subpath, validate) {
 
   if (validate) {
     const exports = await getExports(name, version);
-    if (!exports.includes(subpath)) {
+    if (!exports || !exports.includes(subpath)) {
        toast(`"${subpath}" is not a valid export of ${name}@${version}. Select a valid export from the list via Add Package Export.`);
        removeSubpath(subpathEl);
        return;

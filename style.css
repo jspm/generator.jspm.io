@@ -106,7 +106,8 @@ a {
 }
 .topbar ul.toplinks {
   display: flex;
-  width: 20em;
+  justify-content: flex-end;
+  width: 30em;
   position: absolute;
   right: 0.1em;
   top: 0.1em;
@@ -115,7 +116,8 @@ a {
   font-weight: 100;
   font-size: 1em;
   display: block;
-  flex-grow: 1;
+  margin-left: 0em;
+  margin-right: 2.5em;
 }
 .topbar ul.toplinks li a {
   color: #333;

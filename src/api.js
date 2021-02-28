@@ -15,12 +15,13 @@ const initPromise = (async () => {
   ]);
 })();
 
+// TODO: version lookups
 let esModuleShimsIntegrity;
 export async function getESModuleShimsScript (integrity) {
   // = resolvePkg + integrity()
   return [{
     async: true,
-    url: 'https://ga.jspm.io/npm:es-module-shims@0.10.0/dist/es-module-shims.min.js',
+    url: 'https://ga.jspm.io/npm:es-module-shims@0.10.1/dist/es-module-shims.min.js',
     integrity: '',
     comment: 'ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+)'
   }];

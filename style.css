@@ -70,6 +70,7 @@ a {
   background-repeat: no-repeat;
 }
 .topbar h1 {
+  user-select: none;
   color: #595959;
   font-family: 'Raleway', 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 1em;

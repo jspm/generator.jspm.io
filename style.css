@@ -829,9 +829,11 @@ screen and (max-device-width: 800px) {
     width: 100%;
   }
   .buttonbar .button-box,
-  .buttonbar .button-box:nth-child(1) {
+  .buttonbar .button-box:nth-child(1),
+  .buttonbar .button-box:nth-child(2) {
     display: block;
   }
+  .buttonbar button:nth-child(2),
   .buttonbar button:nth-child(3) {
     display: none;
   }

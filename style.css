@@ -234,7 +234,7 @@ select-box .selected > span, .option > span {
   left: 25em;
   top: 7em;
   width: calc(100% - 25em - 2em);
-  height: calc(100% - 7em - 2em);
+  height: calc(100% - 7em - 2em + 1px);
   background: #F8F8F8;
   box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.1);
 }

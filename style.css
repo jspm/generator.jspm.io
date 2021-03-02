@@ -108,7 +108,7 @@ a {
 .topbar ul.toplinks {
   display: flex;
   justify-content: flex-end;
-  width: 30em;
+  width: 20em;
   position: absolute;
   right: 0.1em;
   top: 0.1em;
@@ -652,6 +652,9 @@ button:active {
   top: 6.1em;
   right: 3.4em;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+}
+.popup .content {
+  color: #777;
 }
 
 .shim {

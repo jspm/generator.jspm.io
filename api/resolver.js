@@ -1,0 +1,11 @@
+export { R as Resolver, a as default, k as getExportsTarget, m as newResolver, s as setOffline } from './resolver-514269c5.js';
+import 'es-module-lexer';
+import 'fs';
+import 'mkdirp';
+import 'buffer';
+import 'path';
+import 'process';
+import 'url';
+import 'crypto';
+import 'sver';
+import 'sver/convert-range';

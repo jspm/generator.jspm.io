@@ -261,7 +261,6 @@ class ImportMapApp {
     this.renderMap();
   }
   envChange (e) {
-    console.log(e);
     const condition = e.target.id.slice(4);
     const value = e.target.checked;
     switch (condition) {

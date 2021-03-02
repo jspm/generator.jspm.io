@@ -8,10 +8,10 @@ const initPromise = (async () => {
     { default: resolver },
     { toPackageTarget, isPackageTarget }
   ] = await Promise.all([
-    import('../lib/tracemap/tracemap.js'),
+    import('../api/tracemap.js'),
     import('sver'),
-    import('../lib/install/resolver.js'),
-    import('../lib/install/package.js')
+    import('../api/resolver.js'),
+    import('../api/package.js')
   ]);
 })();
 
@@ -89,8 +89,6 @@ export async function getMap (deps, integrity, preload, env) {
     return { map: map.toJSON() };
   }
   catch (e) {
-    console.log('ERROR');
-    console.log(e);
     finishInstall(false);
     throw e;
   }

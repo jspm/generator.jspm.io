@@ -1,0 +1,11 @@
+export { f as isPackageTarget, n as newPackageTarget, p as parsePkg, e as parseUrlTarget, j as pkgToStr, g as pkgUrlToNiceString, h as toPackageTarget } from './resolver-514269c5.js';
+import 'sver';
+import 'sver/convert-range';
+import 'fs';
+import 'url';
+import 'process';
+import 'path';
+import 'crypto';
+import 'es-module-lexer';
+import 'mkdirp';
+import 'buffer';

@@ -8,10 +8,10 @@ const initPromise = (async () => {
     { default: resolver },
     { toPackageTarget, isPackageTarget }
   ] = await Promise.all([
-    import('../api/tracemap.js'),
+    import('../api/tracemap.js?1'),
     import('sver'),
-    import('../api/resolver.js'),
-    import('../api/package.js')
+    import('../api/resolver.js?1'),
+    import('../api/package.js?1')
   ]);
 })();
 

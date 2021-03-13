@@ -1,4 +1,4 @@
-export { R as Resolver, a as default, k as getExportsTarget, m as newResolver, s as setOffline } from './resolver-514269c5.js';
+export { R as Resolver, a as default, k as getExportsTarget, m as newResolver, s as setOffline } from './resolver-45c5386a.js';
 import 'es-module-lexer';
 import 'fs';
 import 'mkdirp';

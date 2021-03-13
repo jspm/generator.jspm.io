@@ -1,4 +1,4 @@
-import { t as throwInternalError, J as JspmError, r as relativeUrl, a as resolver, i as isURL, n as newPackageTarget, l as log, b as importedFrom, c as baseUrl, d as isPlain, p as parsePkg } from './resolver-514269c5.js';
+import { t as throwInternalError, J as JspmError, r as relativeUrl, a as resolver, i as isURL, n as newPackageTarget, l as log, b as importedFrom, c as baseUrl, d as isPlain, p as parsePkg } from './resolver-45c5386a.js';
 import sver from 'sver';
 import { builtinModules } from 'module';
 import { pathToFileURL, fileURLToPath } from 'url';
@@ -936,11 +936,17 @@ class TraceMap {
         throw new JspmError(`No resolution in map for ${specifier}${importedFrom(parentUrl)}`);
     }
     async traceUrl(resolvedUrl, parentUrl, env) {
+        const wasCJS = await resolver.wasCommonJS(resolvedUrl);
+        if (wasCJS && env.includes('import'))
+            env = env.map(e => e === 'import' ? 'require' : e);
+        else if (!wasCJS && env.includes('require'))
+            env = env.map(e => e === 'require' ? 'import' : e);
         if (resolvedUrl in this.tracedUrls)
             return;
         if (resolvedUrl.endsWith('/'))
             throw new JspmError(`Trailing "/" installs not yet supported installing ${resolvedUrl} for ${parentUrl.href}`);
         const traceEntry = this.tracedUrls[resolvedUrl] = {
+            wasCJS,
             deps: Object.create(null),
             dynamicDeps: Object.create(null),
             hasStaticParent: true,

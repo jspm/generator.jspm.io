@@ -797,7 +797,7 @@ class TraceMap {
                     this.installer.newInstalls = false;
                     await Promise.all([...this.traces].map(async (trace) => {
                         const [specifier, parentUrl] = trace.split('##');
-                        const resolved = await this.trace(specifier, new URL(parentUrl));
+                        const resolved = await this.trace(specifier, new URL(parentUrl), this.tracedUrls?.[parentUrl]?.wasCJS ? ['import', ...this.env] : ['require', ...this.env]);
                         traceResolutions[trace] = resolved;
                     }));
                 } while (this.installer.newInstalls);

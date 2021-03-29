@@ -4,7 +4,7 @@ import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
 import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
-import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
+import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js?3';
 import { initDependencies, onDepChange } from './dependencies.js';
 
 const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {

@@ -1,4 +1,4 @@
-import { t as throwInternalError, J as JspmError, r as relativeUrl, a as resolver, i as isURL, n as newPackageTarget, l as log, b as importedFrom, c as baseUrl, d as isPlain, p as parsePkg } from './resolver-45c5386a.js';
+import { t as throwInternalError, J as JspmError, r as relativeUrl, a as resolver, i as isURL, n as newPackageTarget, l as log, b as importedFrom, c as baseUrl, d as isPlain, p as parsePkg } from './resolver-569b4677.js';
 import sver from 'sver';
 import { builtinModules } from 'module';
 import { pathToFileURL, fileURLToPath } from 'url';
@@ -126,7 +126,7 @@ function detectIndent(source, newline) {
             indent = curIndent[0].slice(0, -1);
     }
     lines = lines.map(line => line.slice(indent.length));
-    let tabSpaces = lines.map(line => line.match(/^[ \t]*/)?.[0] || '') || [];
+    let tabSpaces = lines.map(line => { var _a; return ((_a = line.match(/^[ \t]*/)) === null || _a === void 0 ? void 0 : _a[0]) || ''; }) || [];
     let tabDifferenceFreqs = new Map();
     let lastLength = 0;
     tabSpaces.forEach(tabSpace => {
@@ -273,7 +273,7 @@ class Installer {
                                 if (versionRange === '*') {
                                     const pcfg = await resolver.getPackageConfig(this.installs[this.installBaseUrl][target.name]);
                                     if (pcfg)
-                                        versionRange = '^' + pcfg?.version;
+                                        versionRange = '^' + (pcfg === null || pcfg === void 0 ? void 0 : pcfg.version);
                                 }
                                 pjson[saveField][name] = (target.name === name ? '' : target.registry + ':' + target.name + '@') + versionRange;
                             }
@@ -390,16 +390,17 @@ class Installer {
         return pkgUrl;
     }
     async install(pkgName, pkgUrl, parentUrl = this.installBaseUrl) {
+        var _a, _b, _c, _d, _e;
         if (!this.installing)
             throwInternalError();
         if (!this.opts.reset) {
-            const existingUrl = this.installs[pkgUrl]?.[pkgName];
+            const existingUrl = (_a = this.installs[pkgUrl]) === null || _a === void 0 ? void 0 : _a[pkgName];
             if (existingUrl && !this.opts.reset)
                 return existingUrl;
         }
         const pcfg = await resolver.getPackageConfig(pkgUrl) || {};
         // package dependencies
-        const installTarget = pcfg.dependencies?.[pkgName] || pcfg.peerDependencies?.[pkgName] || pcfg.optionalDependencies?.[pkgName] || pcfg.devDependencies?.[pkgName];
+        const installTarget = ((_b = pcfg.dependencies) === null || _b === void 0 ? void 0 : _b[pkgName]) || ((_c = pcfg.peerDependencies) === null || _c === void 0 ? void 0 : _c[pkgName]) || ((_d = pcfg.optionalDependencies) === null || _d === void 0 ? void 0 : _d[pkgName]) || ((_e = pcfg.devDependencies) === null || _e === void 0 ? void 0 : _e[pkgName]);
         if (installTarget) {
             const target = newPackageTarget(installTarget, pkgUrl, pkgName);
             return this.installTarget(pkgName, target, pkgUrl, false, parentUrl);
@@ -796,8 +797,9 @@ class TraceMap {
                 do {
                     this.installer.newInstalls = false;
                     await Promise.all([...this.traces].map(async (trace) => {
+                        var _a, _b;
                         const [specifier, parentUrl] = trace.split('##');
-                        const resolved = await this.trace(specifier, new URL(parentUrl), this.tracedUrls?.[parentUrl]?.wasCJS ? ['import', ...this.env] : ['require', ...this.env]);
+                        const resolved = await this.trace(specifier, new URL(parentUrl), ((_b = (_a = this.tracedUrls) === null || _a === void 0 ? void 0 : _a[parentUrl]) === null || _b === void 0 ? void 0 : _b.wasCJS) ? ['require', ...this.env] : ['import', ...this.env]);
                         traceResolutions[trace] = resolved;
                     }));
                 } while (this.installer.newInstalls);
@@ -852,6 +854,7 @@ class TraceMap {
         }
     }
     async trace(specifier, parentUrl = this.mapBase, env = ['import', ...this.env]) {
+        var _a, _b, _c;
         const parentPkgUrl = await resolver.getPackageBase(parentUrl.href);
         if (!parentPkgUrl)
             throwInternalError();
@@ -909,7 +912,7 @@ class TraceMap {
             }
         }
         // @ts-ignore
-        const installed = this.opts.freeze ? this.installer?.installs[parentPkgUrl]?.[pkgName] : await this.installer?.install(pkgName, parentPkgUrl, parentUrl.href);
+        const installed = this.opts.freeze ? (_b = (_a = this.installer) === null || _a === void 0 ? void 0 : _a.installs[parentPkgUrl]) === null || _b === void 0 ? void 0 : _b[pkgName] : await ((_c = this.installer) === null || _c === void 0 ? void 0 : _c.install(pkgName, parentPkgUrl, parentUrl.href));
         if (installed) {
             let [pkgUrl, subpathFilter] = installed.split('|');
             if (subpathFilter)
@@ -969,11 +972,11 @@ class TraceMap {
         }
         const resolvedUrlObj = new URL(resolvedUrl);
         await Promise.all(allDeps.map(async (dep) => {
-            const resolvedUrl = await this.trace(dep, resolvedUrlObj, env);
+            const resolved = await this.trace(dep, resolvedUrlObj, env);
             if (deps.includes(dep))
-                traceEntry.deps[dep] = resolvedUrl;
+                traceEntry.deps[dep] = resolved;
             if (dynamicDeps.includes(dep))
-                traceEntry.dynamicDeps[dep] = [resolvedUrl];
+                traceEntry.dynamicDeps[dep] = [resolved];
         }));
     }
 }

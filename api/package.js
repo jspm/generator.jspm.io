@@ -1,4 +1,4 @@
-export { f as isPackageTarget, n as newPackageTarget, p as parsePkg, e as parseUrlTarget, j as pkgToStr, g as pkgUrlToNiceString, h as toPackageTarget } from './resolver-45c5386a.js';
+export { f as isPackageTarget, n as newPackageTarget, p as parsePkg, e as parseUrlTarget, j as pkgToStr, g as pkgUrlToNiceString, h as toPackageTarget } from './resolver-569b4677.js';
 import 'sver';
 import 'sver/convert-range';
 import 'fs';

@@ -502,7 +502,6 @@ select-box .options {
   border-top: 1px solid #ededed;
 }
 .sidebar .button-cols {
-  margin-top: -1em;
   display: flex;
 }
 .sidebar .button-col {

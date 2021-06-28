@@ -4,8 +4,8 @@ import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
 import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
-import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js?3';
-import { initDependencies, onDepChange } from './dependencies.js?2';
+import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
+import { initDependencies, onDepChange } from './dependencies.js';
 
 const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
   const nl = minify ? '' : '\n';
@@ -17,15 +17,19 @@ const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, prelo
   }
   else {
     scriptType = 'module';
-    linkType = 'script';
+    linkType = 'fetch';
     mapType = 'importmap';
   }
   const injection = `${
+    map ? `\n<!--\n  JSPM Generator Import Map\n  Edit URL: ${editUrl}\n-->\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
+  }${nl}${
     scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, async, module, comment }) =>
       `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${async ? 'async ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}></script>${hidden ? ' -->' : ''}`
     ).join(nl + nl) : ''
   }${nl}${
-    map ? `\n<!--\n  JSPM Generator Import Map\n  Edit URL: ${editUrl}\n-->\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
+    preloads ? '\n' + preloads.map(({ url, integrity }) =>
+      `<link rel="preload" as="${linkType}" href="${url}" crossorigin="anonymous"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
+    ).join(nl) : ''
   }${
     boilerplate && !minify && !system && Object.keys(map.imports).length ? `\n\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
       `import * as ${getIdentifier(specifier)} from "${specifier}";`
@@ -37,10 +41,6 @@ const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, prelo
   }${
     boilerplate && !minify && system ? `\n\n<!-- Load an app.js file written in the "system" module format output (via RollupJS / Babel / TypeScript) -->
 <!-- <script type="${scriptType}" src="app.js"></script> -->` : ''
-  }${
-    preloads ? '\n' + preloads.map(({ url, integrity }) =>
-      `<link rel="preload" as="${linkType}" href="${url}" crossorigin="anonymous"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
-    ).join(nl) : ''
   }`;
   if (!boilerplate)
     return injection.slice(1);
@@ -323,7 +323,8 @@ new ImportMapApp({
     development: true,
     production: false,
     browser: true,
-    node: false
+    node: false,
+    module: true
   },
   output: {
     system: false,

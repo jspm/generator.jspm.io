@@ -1,4 +1,4 @@
-import { getExports, getVersions, resolvePkg } from './api.js?3';
+import { getExports, getVersions, resolvePkg } from './api.js';
 import './progress.js';
 import { toast } from './toast.js';
 

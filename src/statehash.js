@@ -1,6 +1,6 @@
 let zlib, Buffer;
 const initPromise = (async () => {
-  [zlib, { Buffer }] = await Promise.all([import('zlib'), import('buffer')]);
+  [zlib, { Buffer }] = await Promise.all([import('@jspm/core/nodelibs/zlib'), import('@jspm/core/nodelibs/buffer')]);
 })();
 
 const gzipPrefix = new Uint8Array([31, 139, 8, 0, 0, 0, 0, 0, 2, 3]);
@@ -16,6 +16,7 @@ const OUTPUT_MINIFY = 0x40;
 const OUTPUT_JSON = 0x80;
 const OUTPUT_INTEGRITY = 0x100;
 const OUTPUT_PRELOAD = 0x200;
+const ENV_MODULE = 0x400;
 
 const BIT1 = 0x1;
 const BIT2 = 0x2;
@@ -32,6 +33,7 @@ function compressState (state) {
     state.env.production * ENV_PRODUCTION |
     state.env.browser * ENV_BROWSER |
     state.env.node * ENV_NODE |
+    state.env.module * ENV_MODULE |
     state.output.system * OUTPUT_SYSTEM |
     state.output.boilerplate * OUTPUT_BOILERPLATE |
     state.output.minify * OUTPUT_MINIFY |
@@ -99,7 +101,8 @@ function decompressState (buffer) {
       development: bitField & ENV_DEVELOPMENT ? true : false,
       production: bitField & ENV_PRODUCTION ? true : false,
       browser: bitField & ENV_BROWSER ? true : false,
-      node: bitField & ENV_NODE ? true : false
+      node: bitField & ENV_NODE ? true : false,
+      module: bitField & ENV_MODULE ? true : false
     },
     output: {
       system: bitField & OUTPUT_SYSTEM ? true : false,

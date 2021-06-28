@@ -10,7 +10,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="style.css">
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XHJ5SMZHQB"></script>
 <script>
@@ -57,18 +57,32 @@
           <label class="label" for="env-production" title="For packages that define a smaller production export in their package.json, used if available.">Production</label>
         </div>
       </div>
-      <div class="button r">
-        <input type="checkbox" id="env-browser" class="checkbox" checked>
-        <div class="knobs"><div class="knob"></div></div>
-        <div class="layer"></div>
+      <div class="button-cols">
+        <div class="button-col">
+          <div class="button r">
+            <input type="checkbox" id="env-browser" class="checkbox" checked>
+            <div class="knobs"><div class="knob"></div></div>
+            <div class="layer"></div>
+          </div>
+          <label class="label" for="env-browser" title="For packages that define a dedicated browser export in their package.json, used if available.">Browser</label>
+        </div>
+        <div class="button-col">
+          <div class="button r">
+            <input type="checkbox" id="env-module" class="checkbox">
+            <div class="knobs"><div class="knob"></div></div>
+            <div class="layer"></div>
+          </div>
+          <label class="label" for="env-module" title="Packages use the &ldquo;module&rdquo; condition to specifically indicate to bundlers these modules can be consumed via both require() and import(), which Node.js does not support.">Module</label>
+        </div>
       </div>
-      <label class="label" for="env-browser" title="For packages that define a dedicated browser export in their package.json, used if available.">Browser</label>
+      
       <div class="button r">
         <input type="checkbox" id="env-node" class="checkbox">
         <div class="knobs"><div class="knob"></div></div>
         <div class="layer"></div>
       </div>
       <label class="label" for="env-node" title="For packages that define a specific Node.js export in their package.json, used if available.">Node</label>
+
       <!-- <div class="button r">
         <input type="checkbox" id="env-deno" class="checkbox">
         <div class="knobs"><div class="knob"></div></div>
@@ -122,14 +136,14 @@
       </div>
       <label class="label" for="map-integrity" title="Output the subresource integrity on the link preloads for all resources.">Integrity</label>
     </div> -->
-    <!-- <div class="button-box">
+    <div class="button-box">
       <div class="button r">
         <input type="checkbox" id="map-preload" class="checkbox">
         <div class="knobs"><div class="knob"></div></div>
         <div class="layer"></div>
       </div>
       <label class="label" for="map-preload" title="Inject link preload tags for dependencies.">Preload</label>
-    </div> -->
+    </div>
     <div class="end">
       <button id="btn-copy" type="button" title="Copy the generated map above to the clipboard.">
         <svg width="13" height="15" viewBox="0 0 13 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="top: 0.2em;">
@@ -160,39 +174,49 @@
 </body>
 
 <!--
-    JSPM Generator Import Map
-    Edit URL: https://generator.jspm.io/#jY9NCsIwEEZzAe/QjctMoxV12Z0gFARPkLZTf0gyYZKKuvHqprhxl26G78HjwSyFEIuPOJ5PTXFAh6wjcdFoL+p78LbsiLFegwIlW4wadqWjHs2tDWU7DgNy3uv45SPlvSHkHUv9aDDv0YyW1/E6w2LqMMzIjWzy0jtdgUH+/pAGn8i1gg0oEdA+EmyhmmCaK9hD9TdT2CWIkrW74BfxMa/wugE
-  -->
+  JSPM Generator Import Map
+  Edit URL: http://localhost:8080/sandbox.html#Y2NnYGDhD0pNTC5RCC5JLCpJLWJwyCouyNVPzi9KdTDSM9Az0E1KLUnUM9fPy09JzclMKtZPKk1LI0ZdFZCEqkpPzUstSizJL3IwRCg1ZSguSwWJWOgZAwChgpI5iQA
+-->
 <script type="importmap">
-{
-  "imports": {
-    "app": "./src/mapapp.js?4",
-    "api/package": "./api/package.js?4",
-    "api/tracemap": "./api/tracemap.js?4",
-    "api/resolver": "./api/resolver.js?4",
-    "buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
-    "crypto": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/crypto.js",
-    "fs": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/fs.js",
-    "module": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/module.js",
-    "os": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/os.js",
-    "path": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/path.js",
-    "process": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/process.js",
-    "zlib": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/zlib.js",
-    "es-module-lexer": "https://ga.jspm.io/npm:es-module-lexer@0.4.0/dist/lexer.cjs",
-    "semver": "https://ga.jspm.io/npm:semver@6.3.0/semver.js",
-    "sver": "https://ga.jspm.io/npm:sver@1.8.3/sver.js",
-    "sver/convert-range": "https://ga.jspm.io/npm:sver@1.8.3/convert-range.js",
-    "url-original": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/url.js",
-    "url": "./src/url-shim.js",
-    "mkdirp": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/@empty.js"
-  },
-  "scopes": {
-    "https://ga.jspm.io/": {
-      "buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
-      "process": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/process.js"
+  {
+    "imports": {
+      "@jspm/core/nodelibs/buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
+      "@jspm/core/nodelibs/zlib": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/zlib.js",
+      "@jspm/generator": "https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.5/dist/generator.js",
+      "sver": "https://ga.jspm.io/npm:sver@1.8.3/sver.js"
+    },
+    "scopes": {
+      "https://ga.jspm.io/": {
+        "#fetch": "https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.5/dist/fetch.js",
+        "buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
+        "es-module-lexer": "https://ga.jspm.io/npm:es-module-lexer@0.4.1/dist/lexer.cjs",
+        "process": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/process.js",
+        "semver": "https://ga.jspm.io/npm:semver@6.3.0/semver.js",
+        "sver/convert-range.js": "https://ga.jspm.io/npm:sver@1.8.3/convert-range.js"
+      }
     }
   }
-}
-</script>
-<script async src="https://ga.jspm.io/npm:es-module-shims@0.10.1/dist/es-module-shims.js"></script>
-<script type="module">import 'app'</script>
+  </script>
+  
+  <!-- ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+) -->
+  <script async src="https://ga.jspm.io/npm:es-module-shims@0.11.1/dist/es-module-shims.min.js"></script>
+  
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/0db2d221.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/7af69d92.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/c72b53c9.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/de9a8dfb.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/assert.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/events.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/process.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/stream.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/util.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/zlib.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.5/dist/fetch.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.5/dist/generator.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:es-module-lexer@0.4.1/dist/lexer.cjs" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:semver@6.3.0/semver.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:sver@1.8.3/convert-range.js" crossorigin="anonymous"/>
+  <link rel="preload" as="fetch" href="https://ga.jspm.io/npm:sver@1.8.3/sver.js" crossorigin="anonymous"/>
+
+<script type="module">import './src/mapapp.js'</script>

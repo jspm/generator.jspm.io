@@ -17,7 +17,7 @@ const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, prelo
   }
   else {
     scriptType = 'module';
-    linkType = 'fetch';
+    linkType = 'modulepreload';
     mapType = 'importmap';
   }
   const injection = `${
@@ -28,7 +28,7 @@ const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, prelo
     ).join(nl + nl) : ''
   }${nl}${
     preloads ? '\n' + preloads.map(({ url, integrity }) =>
-      `<link rel="preload" as="${linkType}" href="${url}" crossorigin="anonymous"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
+      `<link ${linkType === 'modulepreload' ? 'rel="modulepreload"' : `rel="preload" as="${linkType}"`} href="${url}"${linkType !== 'modulepreload' ? ' crossorigin="anonymous"' : ''}${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
     ).join(nl) : ''
   }${
     boilerplate && !minify && !system && Object.keys(map.imports).length ? `\n\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
@@ -243,13 +243,11 @@ class ImportMapApp {
   outputChange (e) {
     const outputOption = e.target.id.slice(4);
     this.state.output[outputOption] = e.target.checked;
-    if (outputOption === 'integrity' && e.target.checked)
-      toast('TODO: Integrity output.');
     if (outputOption === 'json' && e.target.checked) {
       document.querySelector('#map-boilerplate').checked = false;
       this.state.output.boilerplate = false;
-      // document.querySelector('#map-integrity').checked = false;
-      // this.state.output.integrity = false;
+      document.querySelector('#map-integrity').checked = false;
+      this.state.output.integrity = false;
     }
     if ((outputOption === 'boilerplate' || outputOption === 'integrity') && e.target.checked) {
       document.querySelector('#map-json').checked = false;

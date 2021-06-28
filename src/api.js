@@ -5,26 +5,25 @@ const initPromise = (async () => {
   [
     { Semver },
     { Generator, lookup, getPackageConfig },
-    // { default: crypto },
+    { default: crypto },
   ] = await Promise.all([
     import('sver'),
     import('@jspm/generator'),
-    // import('crypto')
+    import('@jspm/core/nodelibs/crypto')
   ]);
 })();
 
-// const integrityCache = new Map();
+const integrityCache = new Map();
 export async function getIntegrity (url) {
-  return '';
-  // if (integrityCache.has(url))
-  //   return integrityCache.get(url);
-  // const res = await fetch(url);
-  // const buf = await res.text();
-  // const hash = crypto.createHash('sha384');
-  // hash.update(buf);
-  // const integrity = 'sha384-' + hash.digest('base64');
-  // integrityCache.set(url, integrity);
-  // return integrity;
+  if (integrityCache.has(url))
+    return integrityCache.get(url);
+  const res = await fetch(url);
+  const buf = await res.text();
+  const hash = crypto.createHash('sha384');
+  hash.update(buf);
+  const integrity = 'sha384-' + hash.digest('base64');
+  integrityCache.set(url, integrity);
+  return integrity;
 }
 
 // TODO: version lookups
@@ -90,9 +89,8 @@ export async function getMap (deps, integrity, doPreload, env) {
     ...[...staticPreloads].sort(),
     ...[...dynPreloads].sort()
   ].map(async url => {
-    // if (integrity) {
-    //   return { url, integrity: await getIntegrity(url) };
-    // }
+    if (integrity)
+      return { url, integrity: await getIntegrity(url) };
     return { url };
   }));
   return { map, preloads };

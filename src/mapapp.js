@@ -27,7 +27,7 @@ const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, prelo
       `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${async ? 'async ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}></script>${hidden ? ' -->' : ''}`
     ).join(nl + nl) : ''
   }${
-    preloads ? '\n\n' + preloads.map(({ url, integrity }) =>
+    preloads ? nl + '\n' + preloads.map(({ url, integrity }) =>
       `<link ${linkType === 'modulepreload' ? 'rel="modulepreload"' : `rel="preload" as="${linkType}"`} href="${url}"${linkType !== 'modulepreload' ? ' crossorigin="anonymous"' : ''}${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
     ).join(nl) : ''
   }${

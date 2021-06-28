@@ -243,6 +243,10 @@ class ImportMapApp {
   outputChange (e) {
     const outputOption = e.target.id.slice(4);
     this.state.output[outputOption] = e.target.checked;
+    if (outputOption === 'preload' && !e.target.checked) {
+      document.querySelector('#map-integrity').checked = false;
+      this.state.output.integrity = false;
+    }
     if (outputOption === 'json' && e.target.checked) {
       document.querySelector('#map-boilerplate').checked = false;
       this.state.output.boilerplate = false;

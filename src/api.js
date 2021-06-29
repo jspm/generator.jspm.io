@@ -29,7 +29,7 @@ export async function getIntegrity (url) {
 // TODO: version lookups
 export async function getESModuleShimsScript (integrity) {
   // = resolvePkg + integrity()
-  const url = 'https://ga.jspm.io/npm:es-module-shims@0.12.0/dist/es-module-shims.min.js';
+  const url = 'https://ga.jspm.io/npm:es-module-shims@0.12.1/dist/es-module-shims.min.js';
   return [{
     async: true,
     url,

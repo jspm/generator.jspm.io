@@ -177,6 +177,9 @@ select-box .selected {
   padding-right: 5px;
   margin-top: -3px;
 }
+.options-container {
+  scrollbar-width: thin;
+}
 .options-container::-webkit-scrollbar {
   width: 5px;
   transform: translateX(10px);

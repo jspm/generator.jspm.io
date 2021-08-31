@@ -75,20 +75,25 @@
           <label class="label" for="env-module" title="Packages use the &ldquo;module&rdquo; condition to specifically indicate to bundlers these modules can be consumed via both require() and import(), which Node.js does not support.">Module</label>
         </div>
       </div>
+      <div class="button-cols">
+        <div class="button-col">
+          <div class="button r">
+            <input type="checkbox" id="env-node" class="checkbox">
+            <div class="knobs"><div class="knob"></div></div>
+            <div class="layer"></div>
+          </div>
+          <label class="label" for="env-node" title="For packages that define a specific Node.js export in their package.json, used if available.">Node</label>
+        </div>
       
-      <div class="button r">
-        <input type="checkbox" id="env-node" class="checkbox">
-        <div class="knobs"><div class="knob"></div></div>
-        <div class="layer"></div>
+        <!-- <div class="button-col">
+          <div class="button r">
+            <input type="checkbox" id="env-deno" class="checkbox">
+            <div class="knobs"><div class="knob"></div></div>
+            <div class="layer"></div>
+          </div>
+          <label class="label" for="env-deno" title="Uses Deno the implementation of the Node.js standard library">Deno</label>
+        </div> -->
       </div>
-      <label class="label" for="env-node" title="For packages that define a specific Node.js export in their package.json, used if available.">Node</label>
-
-      <!-- <div class="button r">
-        <input type="checkbox" id="env-deno" class="checkbox">
-        <div class="knobs"><div class="knob"></div></div>
-        <div class="layer"></div>
-      </div>
-      <label class="label" for="env-deno" title="Basically no packages have a 'deno' export in their package.json, but if they did this would support it.">Deno</label> -->
     </div>
   </div>
   <progress-bar class="main"></progress-bar>
@@ -175,12 +180,12 @@
 
 <!--
   JSPM Generator Import Map
-  Edit URL: https://generator.jspm.io/#Y2NnYGCVD0pNTC5RCC5JLCpJLWJwyCouyNVPzi9KdTDSM9Az0E1KLUnUM9fPy09JzclMKtZPKk1LI0ZdclFlQUk+YXVVQBKqKj01L7UosSS/yMEQodSMobgsFSRioWcMAD5K7LKxAA
+  Edit URL: https://generator.jspm.io/#Y2NnYGCVD0pNTC5RCC5JLCpJLWJwyCouyNVPzi9KdTDSM9Az0E1KLUnUs9DPy09JzclMKtZPKk1LI0ZdclFlQUk+YXVVQBKqKj01L7UosSS/yMEQodTQkKG4LBUkZKFnDAAayFyssgA
 -->
 <script type="importmap">
 {
   "imports": {
-    "mapapp": "./src/mapapp.js?v4",
+    "mapapp": "./src/mapapp.js?v5",
     "/src/api.js": "/src/api.js?v6",
     "/src/mapapp.js": "/src/mapapp.js?v4",
     "/src/dependencies.js": "/src/dependencies.js?v4",
@@ -192,44 +197,116 @@
     "/src/toast.js": "/src/toast.js?v4",
     "/src/url-shim.js": "/src/url-shim.js?v4",
     "/src/utils.js": "/src/utils.js?v4",
-    "@jspm/core/nodelibs/buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
-    "@jspm/core/nodelibs/crypto": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/crypto.js",
-    "@jspm/core/nodelibs/zlib": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/zlib.js",
-    "@jspm/generator": "https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.6/dist/generator.js",
+    "typescript": "https://unpkg.com/typescript@4.3.5/lib/typescript.js",
+    "@jspm/core/nodelibs/buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/buffer.js",
+    "@jspm/core/nodelibs/crypto": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/crypto.js",
+    "@jspm/core/nodelibs/zlib": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/zlib.js",
+    "@jspm/generator": "https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.13/dist/generator.js",
     "sver": "https://ga.jspm.io/npm:sver@1.8.3/sver.js"
   },
   "scopes": {
     "https://ga.jspm.io/": {
-      "#fetch": "https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.6/dist/fetch.js",
-      "buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js",
-      "es-module-lexer": "https://ga.jspm.io/npm:es-module-lexer@0.4.1/dist/lexer.cjs",
-      "process": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/process.js",
+      "#fetch": "https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.13/dist/fetch-native.js",
+      "#lib/config/files/index.js": "https://ga.jspm.io/npm:@babel/core@7.15.0/lib/config/files/index-browser.js",
+      "#lib/config/resolve-targets.js": "https://ga.jspm.io/npm:@babel/core@7.15.0/lib/config/resolve-targets-browser.js",
+      "#lib/transform-file.js": "https://ga.jspm.io/npm:@babel/core@7.15.0/lib/transform-file-browser.js",
+      "#lib/transformation/util/clone-deep.js": "https://ga.jspm.io/npm:@babel/core@7.15.0/lib/transformation/util/clone-deep-browser.js",
+      "@babel/code-frame": "https://ga.jspm.io/npm:@babel/code-frame@7.14.5/lib/index.js",
+      "@babel/compat-data/native-modules": "https://ga.jspm.io/npm:@babel/compat-data@7.15.0/native-modules.js",
+      "@babel/compat-data/plugins": "https://ga.jspm.io/npm:@babel/compat-data@7.15.0/plugins.js",
+      "@babel/core": "https://ga.jspm.io/npm:@babel/core@7.15.0/lib/dev.index.js",
+      "@babel/generator": "https://ga.jspm.io/npm:@babel/generator@7.15.0/lib/index.js",
+      "@babel/helper-annotate-as-pure": "https://ga.jspm.io/npm:@babel/helper-annotate-as-pure@7.14.5/lib/index.js",
+      "@babel/helper-compilation-targets": "https://ga.jspm.io/npm:@babel/helper-compilation-targets@7.15.0/lib/index.js",
+      "@babel/helper-create-class-features-plugin": "https://ga.jspm.io/npm:@babel/helper-create-class-features-plugin@7.15.0/lib/index.js",
+      "@babel/helper-function-name": "https://ga.jspm.io/npm:@babel/helper-function-name@7.14.5/lib/index.js",
+      "@babel/helper-get-function-arity": "https://ga.jspm.io/npm:@babel/helper-get-function-arity@7.14.5/lib/index.js",
+      "@babel/helper-hoist-variables": "https://ga.jspm.io/npm:@babel/helper-hoist-variables@7.14.5/lib/index.js",
+      "@babel/helper-member-expression-to-functions": "https://ga.jspm.io/npm:@babel/helper-member-expression-to-functions@7.15.0/lib/index.js",
+      "@babel/helper-module-imports": "https://ga.jspm.io/npm:@babel/helper-module-imports@7.14.5/lib/index.js",
+      "@babel/helper-module-transforms": "https://ga.jspm.io/npm:@babel/helper-module-transforms@7.15.0/lib/index.js",
+      "@babel/helper-optimise-call-expression": "https://ga.jspm.io/npm:@babel/helper-optimise-call-expression@7.14.5/lib/index.js",
+      "@babel/helper-plugin-utils": "https://ga.jspm.io/npm:@babel/helper-plugin-utils@7.14.5/lib/index.js",
+      "@babel/helper-replace-supers": "https://ga.jspm.io/npm:@babel/helper-replace-supers@7.15.0/lib/index.js",
+      "@babel/helper-simple-access": "https://ga.jspm.io/npm:@babel/helper-simple-access@7.14.8/lib/index.js",
+      "@babel/helper-split-export-declaration": "https://ga.jspm.io/npm:@babel/helper-split-export-declaration@7.14.5/lib/index.js",
+      "@babel/helper-validator-identifier": "https://ga.jspm.io/npm:@babel/helper-validator-identifier@7.14.9/lib/index.js",
+      "@babel/helper-validator-option": "https://ga.jspm.io/npm:@babel/helper-validator-option@7.14.5/lib/index.js",
+      "@babel/helpers": "https://ga.jspm.io/npm:@babel/helpers@7.15.3/lib/index.js",
+      "@babel/highlight": "https://ga.jspm.io/npm:@babel/highlight@7.14.5/lib/index.js",
+      "@babel/parser": "https://ga.jspm.io/npm:@babel/parser@7.15.3/lib/index.js",      
+      "@babel/plugin-syntax-typescript": "https://ga.jspm.io/npm:@babel/plugin-syntax-typescript@7.14.5/lib/index.js",
+      "@babel/plugin-transform-typescript": "https://ga.jspm.io/npm:@babel/plugin-transform-typescript@7.15.0/lib/index.js",
+      "@babel/preset-typescript": "https://ga.jspm.io/npm:@babel/preset-typescript@7.15.0/lib/index.js",
+      "@babel/template": "https://ga.jspm.io/npm:@babel/template@7.14.5/lib/index.js",  
+      "@babel/traverse": "https://ga.jspm.io/npm:@babel/traverse@7.15.0/lib/index.js",  
+      "@babel/types": "https://ga.jspm.io/npm:@babel/types@7.15.0/lib/index.js",        
+      "@jspm/import-map": "https://ga.jspm.io/npm:@jspm/import-map@0.1.5/dist/map.js",  
+      "ansi-styles": "https://ga.jspm.io/npm:ansi-styles@3.2.1/index.js",
+      "assert": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/assert.js",
+      "browserslist": "https://ga.jspm.io/npm:browserslist@4.16.8/index.js",
+      "browserslist/node.js": "https://ga.jspm.io/npm:browserslist@4.16.8/browser.js",  
+      "buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/buffer.js",
+      "caniuse-lite/dist/unpacker/agents": "https://ga.jspm.io/npm:caniuse-lite@1.0.30001252/dist/unpacker/agents.js",
+      "chalk": "https://ga.jspm.io/npm:chalk@2.4.2/index.js",
+      "color-convert": "https://ga.jspm.io/npm:color-convert@1.9.3/index.js",
+      "color-name": "https://ga.jspm.io/npm:color-name@1.1.3/index.js",
+      "convert-source-map": "https://ga.jspm.io/npm:convert-source-map@1.8.0/index.js", 
+      "debug": "https://ga.jspm.io/npm:debug@4.3.2/src/browser.js",
+      "electron-to-chromium/versions": "https://ga.jspm.io/npm:electron-to-chromium@1.3.822/versions.js",
+      "es-module-lexer": "https://ga.jspm.io/npm:es-module-lexer@0.4.1/dist/lexer.cjs", 
+      "escape-string-regexp": "https://ga.jspm.io/npm:escape-string-regexp@1.0.5/index.js",
+      "fs": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/fs.js",    
+      "gensync": "https://ga.jspm.io/npm:gensync@1.0.0-beta.2/index.js",
+      "globals": "https://ga.jspm.io/npm:globals@11.12.0/index.js",
+      "js-tokens": "https://ga.jspm.io/npm:js-tokens@4.0.0/index.js",
+      "jsesc": "https://ga.jspm.io/npm:jsesc@2.5.2/jsesc.js",
+      "ms": "https://ga.jspm.io/npm:ms@2.1.2/index.js",
+      "node-releases/data/processed/envs.json": "https://ga.jspm.io/npm:node-releases@1.1.75/data/processed/envs.json.js",
+      "node-releases/data/release-schedule/release-schedule.json": "https://ga.jspm.io/npm:node-releases@1.1.75/data/release-schedule/release-schedule.json.js",
+      "path": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/path.js",
+      "process": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/process.js",
+      "safe-buffer": "https://ga.jspm.io/npm:safe-buffer@5.1.2/index.js",
       "semver": "https://ga.jspm.io/npm:semver@6.3.0/semver.js",
-      "sver/convert-range.js": "https://ga.jspm.io/npm:sver@1.8.3/convert-range.js"
+      "source-map": "https://ga.jspm.io/npm:source-map@0.5.7/source-map.js",
+      "supports-color": "https://ga.jspm.io/npm:supports-color@5.5.0/browser.js",       
+      "sver": "https://ga.jspm.io/npm:sver@1.8.3/sver.js",
+      "sver/convert-range.js": "https://ga.jspm.io/npm:sver@1.8.3/convert-range.js",
+      "to-fast-properties": "https://ga.jspm.io/npm:to-fast-properties@2.0.0/index.js",
+      "url": "https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/url.js"
     }
   }
-} 
+}
 </script>
 
 <!-- ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+) -->
 <script async src="https://ga.jspm.io/npm:es-module-shims@0.12.1/dist/es-module-shims.min.js" crossorigin="anonymous" integrity="sha384-3SrCId4evItM9urBAR1yLHVGXjjbxKEvQc5kpWHNp9P3E2qspW8AWXvhel+L/8L2"></script>
 
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/0db2d221.js" integrity="sha384-Oe38ELlp8iio2hRyQiz2P4Drqc+ztA7jb7lONj7H3Cq+W88bloPxoZzuk6bHBHZv"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/7af69d92.js" integrity="sha384-kjKb2aJJUT956WSU7Z0EF9DZyHy9gdvPOvIWbcEGATXKYxJfkEVOcuP1q20GT2LO"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/c72b53c9.js" integrity="sha384-Fwh0dF5ROSVrdd/vJOvq0pT4R6RLZOOvf6k+ijkAyUtwCP7B0E3qHy8wbot/ivfO"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/_/de9a8dfb.js" integrity="sha384-l6ya0GeHz1H2Lqworibt24gQfZlv6maxA4RiLldCM53zeThW1DXj843+wJ32ZvDE"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/assert.js" integrity="sha384-EB0A/Q4gEPomXa9RpumGVlKF/vJUcUtMbAUz4AakutnDdrttLnNb9SSzsBTAkhv4"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/buffer.js" integrity="sha384-uUctqkO4pDQ0FTWy3Pq8dpNZQ/+73qh9mliq5xAcLnglntWfCI3c5j92RnnwpZS8"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/crypto.js" integrity="sha384-J9Xc8V8lmq+wzHRYde7nPCqZsPzQWbr5tlMhxSuVuIwFPDhdu7j5dYFcQ/lmLp0f"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/events.js" integrity="sha384-gbWdtZPgdHo8iLdONsRg0p88zHeHG32CChiy/wIIot4VcFWDbmg4B3LP37K/tTQo"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/process.js" integrity="sha384-tbSSAJ6myarOAK39WpukTM6MNq9wjOdrYuvzgkX2s8oPP4IgpzWC6QfmOyWAjyob"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/stream.js" integrity="sha384-nbg60S501QOIAZoTdtaY5kiMpML9LqDH475m4yFiCHea7tbuUDNVCsowBOCnmwR4"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/string_decoder.js" integrity="sha384-jqVOQidAyqWovByCeLiVbWLu4baswxVFQqNNzuaw/B7hq0SaIG3XoTNbP04lPTpr"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/util.js" integrity="sha384-X6DjuKT2VLUUbqYJ2cdLdg3p8ciWExKnDaPzppwFhSYZjl+8kSLH+pE4TmoaRrTy"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/vm.js" integrity="sha384-zY14bRP76ABfou3I4d9m7V+JYccXDQvF2zrJ/QqLrxPg61iUJkX9WZMTG7SVsWKE"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.7/nodelibs/zlib.js" integrity="sha384-uS6IkZ7NwlZL0m9SWoQt64o5dnMSu+/zqdGxEXa8R/jwSOdyiQ0LcVl/FG6xtX3Q"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.6/dist/fetch.js" integrity="sha384-Oa1uyAGPAlDlMlB2Bx5kXP/86boOjhkmnDepajWAI6LrsfF4K7HTpwroFWSr8FxO"/>
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.6/dist/generator.js" integrity="sha384-t2VdG0IWV3amxzqYGTLbf9tYwAAGVBiaxqg+DLWzegzbsR14hKBFFjNUyO9aPnhc"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/0bb661d8.js" integrity="sha384-LJ6P9Sp20vmYPKlrCkvVZlI2cQ4mR/+WtjS/HSkUbhR2qe94sgWp4IQ9WekXNMqp"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/1aee2336.js" integrity="sha384-6+lkXbQpRjSrtnaNsksOQEd0a5PVgwzSETi3pHZIY1LTZ4JDrd3v54YHA+kr3GJ2"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/1fe67b90.js" integrity="sha384-HBRlpR8hMj4N4GOsI9K6Anm3/4haMgv5sBDP8fQu38nIT6YCgneSUuAiiqiVUmSM"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/28d37e71.js" integrity="sha384-nFNqykCJCMg7bBAiTsWaxLw76dYdVXxnP856c5eJzgOPcsGi9jv2gJl2xibLfD5y"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/70d429d1.js" integrity="sha384-aUByWqwmf1lQgH9oBYnt0CXCKNA1JqJjI40CnektonPZlxqudpXCU+GxxR2jWnbo"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/ad4ff3a9.js" integrity="sha384-MGyL5F0+67HsQI62E4T0rNiwvulZYTiIGgBbAojTu56a0kI5iNSy7t0WZM+3t3ll"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/b0e9b42d.js" integrity="sha384-Wnstd45CnZ/XcF50tu3Ajax84ADMVU8A9ugAtZJ2v/30fNaKujYHy5Dp5mydjdd5"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/b2a98d7e.js" integrity="sha384-KE83g6+hb8TZBt4B751YsPO3ZI7LW7grRdMHTYUeYW2mJXrwtidGqdAdIrXd7VVx"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/c9f5fbe8.js" integrity="sha384-/uIQGEeFYaCr6d3gzowGOxKVIzyKqLJz+/BagydF2z2jokK8xvaJmU/P8WUUz++G"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/dedf2088.js" integrity="sha384-B3eMqshmVAZsLq+LhjoVAFQNrJyEOdb/K40e5fTLEMiE7+Ox4gjQRuqToHAwK5lq"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/eee95730.js" integrity="sha384-oqoGr69ZtLFInPBFFHtTRbegUfAPFW1L4Gq6ijI2CeKPW09xH/tJWp2wDcLEc0nz"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/f762d307.js" integrity="sha384-W/8xTmRNw0/1FNsbUr3FGBGpeFCSt42PktRJ3GlW5EAv/6Q5SV2ETc3x4MWP9AwV"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/_/f87e0e8d.js" integrity="sha384-hZ/JRnHu8NI74/60JU1seqkpXCePQRsNNbIG6yUWYgSCrm5V1kZaAxDTAcV9ija8"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/buffer.js" integrity="sha384-0iFWtwyZ00tsyAKLIijmi3SqcB/Wv+DbBYGizJGuNsCovueS9WmBoMTS0eoc2Ssk"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/crypto.js" integrity="sha384-YiL6Py9yrOvVJZmHt+dm7LaDPKVJlCDDkIkxDrKHcY3KDWzR7h7IosvOQMK45oSh"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/fs.js" integrity="sha384-yJ2j36tgQOv/1qgD8zIW6YsO2mgn/0pZMHByOpnNHLJMJAcYWEpnqOlEhX6f8Av4"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/process-production.js" integrity="sha384-+OrSO99B6rXzAGAgdB3ynVq+6T+hZDjLWQJ8eKUufsbtJsIdl5vQC4naVgoLy//l"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/process.js" integrity="sha384-Zl5asd4VP+uka6J7H/jcYi7WcDCPw3AaQbccT+/RnRl3U7/yKIo5pnlTrj1UZopt"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/stream.js" integrity="sha384-2b4+fEgW34nnDfjg0WdY1bxEXtJUALxpFB9R/um8aY0wwNU9RmD2/6+a9w3FbpP2"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/url.js" integrity="sha384-H6qzSPCKonX5w7yq7Wim1VDaCkz21SsCMe6GdM28beGImQpUP12ao3cuY/x+B839"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/util.js" integrity="sha384-i8ktoAsRw9iGl1kAQwecBYcP2858EIoXjVPFS4doBXTmkfYoeoF/qYQ2rSoiolKw"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.8/nodelibs/browser/zlib.js" integrity="sha384-dQ99s7v2snIolDBjNkn02zSKqqsnYtcGVusevP1YIV8qoVVzKoXL/R6D59H12hX9"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.11/dist/fetch-native.js" integrity="sha384-C09rxxta7hQCgxn8CkhBZDxsz0U3EeDyxrOq0ScnwMwjnj3lMURVSDVkiLDgNBL4"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.0.0-beta.11/dist/generator.js" integrity="sha384-Ec9gT2qNCWvDgTJhWVvYzqUIm4C5mhZ762NZIf2CmoZCmhyWyJ5NptMH4fVZ2bs6"/>
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/import-map@0.1.5/dist/map.js" integrity="sha384-msM92FOd/RQZ9T4kpqF1AqeCwXcT4AKZ9HNmVA5szkELdLOpWJMEqFmITu7qLxxt"/>
 <link rel="modulepreload" href="https://ga.jspm.io/npm:es-module-lexer@0.4.1/dist/lexer.cjs" integrity="sha384-aegPNcVDBUE/B5TBSSozuB8aThfrd+uIpMEOJn1X7dCTllLrgyPla0NzEm2wVFdg"/>
 <link rel="modulepreload" href="https://ga.jspm.io/npm:semver@6.3.0/semver.js" integrity="sha384-sfUVyKqEnC40YDLvSNpkOzG9Y/4v5DqsYoGsQem4nw9FGexyC1DN88KZpagfXp9g"/>
 <link rel="modulepreload" href="https://ga.jspm.io/npm:sver@1.8.3/convert-range.js" integrity="sha384-GYoX2IL1JE66Pi8egxvjatk7F5QfMtVPpkzXtjHy2up0zjMZYDuWmukQmRMXBWpD"/>

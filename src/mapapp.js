@@ -278,28 +278,32 @@ class ImportMapApp {
 
       case 'browser':
         if (value) {
-          // document.querySelector('#env-deno').checked = false;
-          // this.state.env.deno = false;
-          document.querySelector('#env-node').checked = false;
-          this.state.env.node = false;
+          if (!this.state.env.deno) {
+            document.querySelector('#env-node').checked = false;
+            this.state.env.node = false;
+          }
         }
       break;
 
       case 'node':
         if (value) {
-          document.querySelector('#env-browser').checked = false;
-          this.state.env.browser = false;
-          // document.querySelector('#env-deno').checked = false;
-          // this.state.env.deno = false;
+          if (!this.state.env.deno) {
+            document.querySelector('#env-browser').checked = false;
+            this.state.env.browser = false;
+          }
         }
       break;
 
       case 'deno':
         if (value) {
-          document.querySelector('#env-node').checked = false;
+          document.querySelector('#env-node').checked = true;
+          this.state.env.node = true;
+          document.querySelector('#env-browser').checked = true;
+          this.state.env.browser = true;
+        }
+        else if (this.state.env.node && this.state.env.browser) {
           this.state.env.node = false;
-          document.querySelector('#env-browser').checked = false;
-          this.state.env.browser = false;
+          document.querySelector('#env-node').checked = false;
         }
       break;
     }

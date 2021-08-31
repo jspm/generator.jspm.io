@@ -279,7 +279,7 @@ class ImportMapApp {
       case 'browser':
         if (value) {
           if (!this.state.env.deno) {
-            document.querySelector('#env-node').checked = false;
+            // document.querySelector('#env-node').checked = false;
             this.state.env.node = false;
           }
         }

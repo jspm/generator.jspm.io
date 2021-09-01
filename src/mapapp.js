@@ -279,7 +279,7 @@ class ImportMapApp {
       case 'browser':
         if (value) {
           if (!this.state.env.deno) {
-            // document.querySelector('#env-node').checked = false;
+            document.querySelector('#env-node').checked = false;
             this.state.env.node = false;
           }
         }
@@ -300,6 +300,8 @@ class ImportMapApp {
           this.state.env.node = true;
           document.querySelector('#env-browser').checked = true;
           this.state.env.browser = true;
+          document.querySelector('#map-json').checked = true;
+          this.state.output.json = true;
         }
         else if (this.state.env.node && this.state.env.browser) {
           this.state.env.node = false;
@@ -330,7 +332,8 @@ new ImportMapApp({
     production: false,
     browser: true,
     node: false,
-    module: true
+    module: true,
+    deno: false
   },
   output: {
     system: false,

@@ -17,6 +17,7 @@ const OUTPUT_JSON = 0x80;
 const OUTPUT_INTEGRITY = 0x100;
 const OUTPUT_PRELOAD = 0x200;
 const ENV_MODULE = 0x400;
+const ENV_DENO = 0x800;
 
 const BIT1 = 0x1;
 const BIT2 = 0x2;
@@ -34,6 +35,7 @@ function compressState (state) {
     state.env.browser * ENV_BROWSER |
     state.env.node * ENV_NODE |
     state.env.module * ENV_MODULE |
+    state.env.deno * ENV_DENO |
     state.output.system * OUTPUT_SYSTEM |
     state.output.boilerplate * OUTPUT_BOILERPLATE |
     state.output.minify * OUTPUT_MINIFY |
@@ -102,7 +104,8 @@ function decompressState (buffer) {
       production: bitField & ENV_PRODUCTION ? true : false,
       browser: bitField & ENV_BROWSER ? true : false,
       node: bitField & ENV_NODE ? true : false,
-      module: bitField & ENV_MODULE ? true : false
+      module: bitField & ENV_MODULE ? true : false,
+      deno: bitField & ENV_DENO ? true : false
     },
     output: {
       system: bitField & OUTPUT_SYSTEM ? true : false,

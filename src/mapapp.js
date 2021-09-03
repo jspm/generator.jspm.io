@@ -305,8 +305,8 @@ class ImportMapApp {
           this.state.output.json = true;
         }
         else if (this.state.env.node && this.state.env.browser) {
-          this.state.env.node = false;
-          document.querySelector('#env-node').checked = false;
+          this.state.env.browser = false;
+          document.querySelector('#env-browser').checked = false;
         }
       break;
     }

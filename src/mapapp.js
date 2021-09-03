@@ -80,7 +80,10 @@ class ImportMapApp {
         download(this.code, this.state.name + (this.state.output.json ? '.json' : '.html'));
     });
     document.querySelector('#btn-copy-share').addEventListener('click', async () => {
-      if (!this.code) {
+      if (this.state.output.json) {
+        toast('The JSPM Sandbox only supports HTML apps.');
+      }
+      else if (!this.code) {
         toast('Nothing to copy.');
       }
       else {

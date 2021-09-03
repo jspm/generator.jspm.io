@@ -301,8 +301,6 @@ class ImportMapApp {
         if (value) {
           document.querySelector('#env-node').checked = true;
           this.state.env.node = true;
-          document.querySelector('#env-browser').checked = true;
-          this.state.env.browser = true;
           document.querySelector('#map-json').checked = true;
           this.state.output.json = true;
         }

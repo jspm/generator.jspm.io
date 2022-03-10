@@ -1,0 +1,8 @@
+{
+  "name": "mapapp",
+  "exports": "./src/mapapp.js",
+  "devDependencies": {
+    "@jspm/generator": "^1.0.0-beta.25",
+    "mkdirp": "^1.0.4"
+  }
+}

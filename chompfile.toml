@@ -1,50 +1,23 @@
 version = 0.1
 
-[[task]]
-name = 'npm:install'
-targets = [
-    'node_modules',
-    'package-lock.json',
-]
-deps = ['package.json']
-validation = 'ok-only'
-display = 'init-only'
-run = 'npm install'
+extensions = ['chomp@0.1:jspm']
 
+[template-options.npm]
+auto-install = true
+
+# Generate an import map for a browser HTML page
 [[task]]
 name = 'build'
-targets = ['sandbox.html']
-deps = [
-    'sandbox.html',
-    'src/**/*',
-    'npm:install',
-]
-invalidation = 'always'
-engine = 'node'
-run = '''
-    import { Generator } from '../generator/dist/generator.js';
-    import { readFile, writeFile } from 'fs/promises';
-    import { pathToFileURL } from 'url';
-    import mkdirp from 'mkdirp';
-    import { dirname } from 'path';
-
-    const generator = new Generator({
-      mapUrl: pathToFileURL(process.env.TARGET),
-      env: ["browser", "production", "module"]
-    });
-
-    const htmlSource = await readFile(process.env.DEP, 'utf-8');
-
-    mkdirp.sync(dirname(process.env.TARGET));
-    await writeFile(process.env.TARGET, await generator.htmlGenerate(htmlSource, {
-      htmlUrl: pathToFileURL(process.env.TARGET),      
-      preload: true,
-      integrity: true
-    }));
-'''
+target = 'sandbox.html'
+deps = ['sandbox.html', 'src/**/*']
+template = 'jspm'
+[task.template-options]
+env = ['browser', 'production', 'module']
+preload = true
+integrity = true
+custom = 'option'
+another-custom = 'option'
 
 [[task]]
 name = 'deploy'
 run = 'ipfs --api=/ip4/127.0.0.1/tcp/45005 name publish /ipfs/$(ipfs --api=/ip4/127.0.0.1/tcp/45005 add -r . -Q --cid-version=1)'
-[template-options.npm]
-auto-install = true

@@ -15,8 +15,6 @@ template = 'jspm'
 env = ['browser', 'production', 'module']
 preload = true
 integrity = true
-custom = 'option'
-another-custom = 'option'
 
 [[task]]
 name = 'deploy'

@@ -1,0 +1,21 @@
+version = 0.1
+
+extensions = ['chomp@0.1:jspm']
+
+[template-options.npm]
+auto-install = true
+
+# Generate an import map for a browser HTML page
+[[task]]
+name = 'build'
+target = 'sandbox.html'
+deps = ['sandbox.html', 'src/**/*']
+template = 'jspm'
+[task.template-options]
+env = ['browser', 'production', 'module']
+preload = true
+integrity = true
+
+[[task]]
+name = 'deploy'
+run = 'ipfs --api=/ip4/127.0.0.1/tcp/45005 name publish /ipfs/$(ipfs --api=/ip4/127.0.0.1/tcp/45005 add -r . -Q --cid-version=1)'

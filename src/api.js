@@ -29,7 +29,7 @@ export async function getIntegrity (url) {
 // TODO: version lookups
 export async function getESModuleShimsScript (integrity) {
   // = resolvePkg + integrity()
-  const url = 'https://ga.jspm.io/npm:es-module-shims@0.12.8/dist/es-module-shims.min.js';
+  const url = 'https://ga.jspm.io/npm:es-module-shims@1.4.7/dist/es-module-shims.min.js';
   return [{
     async: true,
     url,
@@ -41,7 +41,7 @@ export async function getESModuleShimsScript (integrity) {
 
 export async function getSystemScripts (integrity) {
   // = resolvePkg + integrity()
-  const systemUrl = 'https://ga.system.jspm.io/npm:systemjs@6.10.3/dist/s.min.js';
+  const systemUrl = 'https://ga.system.jspm.io/npm:systemjs@6.12.1/dist/s.min.js';
   const systemBabelUrl = 'https://ga.system.jspm.io/npm:systemjs-babel@0.3.1/dist/systemjs-babel.js';
   return [
     {

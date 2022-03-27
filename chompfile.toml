@@ -1,9 +1,8 @@
 version = 0.1
 
-extensions = ['chomp@0.1:jspm']
+default-task = 'build'
 
-[template-options.npm]
-auto-install = true
+extensions = ['chomp@0.1:jspm']
 
 # Generate an import map for a browser HTML page
 [[task]]

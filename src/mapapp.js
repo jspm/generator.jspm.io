@@ -4,7 +4,7 @@ import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
 import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
-import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
+import { getESModuleShimsScript, getSystemScripts, getMap, installMultipleDeps } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
 
 const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
@@ -96,6 +96,26 @@ class ImportMapApp {
         this.state.name = value;
         this.renderMap();
       }
+    });
+    document.querySelector('#btn-upload-package-json').addEventListener('click', () => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = 'application/JSON'
+      input.onchange = async () => {
+        const file =   Array.from(input.files)[0];
+        try {
+          const content = await file.text()
+          const installedDeps = await installMultipleDeps(JSON.parse(content || `{}`)?.dependencies || {})
+          this.state.deps = [...this.state.deps, ...installedDeps]
+          initDependencies(this.state.deps)
+          
+          this.renderMap()
+        } catch (e) {
+          console.log(e)
+          toast('Failed in reading file content')
+        }
+      }
+      input.click();
     });
     onDepChange(newDeps => {
       if (JSON.stringify(newDeps) === JSON.stringify(this.state.deps))

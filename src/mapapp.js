@@ -30,7 +30,7 @@ const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, prelo
     mapType = 'importmap';
   }
   const injection = `${
-    map ? `\n<!--\n  JSPM Generator Import Map\n  Edit URL: ${editUrl}\n-->\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
+    map ? `\n<!--\n  JSPM Generator Import Map\n  Edit URL: ${editUrl}\n-->\n \n ${`<!-- Drag and drop package.json to convert into import-map -->`} \n \n <script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
   }${nl}${
     scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, async, module, comment, crossorigin }) =>
       `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${async ? 'async ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}${crossorigin ? ' crossorigin="anonymous"' : ''}></script>${hidden ? ' -->' : ''}`

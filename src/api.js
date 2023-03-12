@@ -9,7 +9,7 @@ const initPromise = (async () => {
   ] = await Promise.all([
     import('sver'),
     import('@jspm/generator'),
-    import('@jspm/core/nodelibs/crypto')
+    import('@jspm/core/nodelibs/crypto'),
   ]);
 })();
 

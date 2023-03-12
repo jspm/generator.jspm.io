@@ -7,6 +7,15 @@ import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
 import { getESModuleShimsScript, getSystemScripts, getMap, installMultipleDeps } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
 
+let DragDrop
+const initPromise = (async () => {
+  [
+    { default: DragDrop }
+  ] = await Promise.all([
+    import('drag-drop')
+  ]);
+})();
+
 const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
   const nl = minify ? '' : '\n';
   let scriptType, linkType, mapType;
@@ -103,17 +112,7 @@ class ImportMapApp {
       input.accept = 'application/JSON'
       input.onchange = async () => {
         const file =   Array.from(input.files)[0];
-        try {
-          const content = await file.text()
-          const installedDeps = await installMultipleDeps(JSON.parse(content || `{}`)?.dependencies || {})
-          this.state.deps = [...this.state.deps, ...installedDeps]
-          initDependencies(this.state.deps)
-          
-          this.renderMap()
-        } catch (e) {
-          console.log(e)
-          toast('Failed in reading file content')
-        }
+        this.processJSONFile(file)
       }
       input.click();
     });
@@ -140,9 +139,48 @@ class ImportMapApp {
         this.renderMap();
       }
     });
+
+    window.addEventListener('load', () => {
+      this.initDragDrop()
+    })
     this.state = initState;
     this.firstRender = true;
     this.renderMap();
+  }
+  
+  async initDragDrop() {
+    await initPromise
+    const elm = document.getElementById('drop-target')
+    if (!elm) {
+      return
+    }
+  
+    DragDrop('#drop-target', {
+      onDragEnter: () => {
+        elm.style.border = '1px dashed red'
+      },
+      onDrop: async (files) => {
+        const file = files.find((file) => file.type === 'application/json')
+        this.processJSONFile(file)
+      },
+      onDragLeave: () => {
+        elm.style.border = 'none'
+      }
+    })
+  }
+  
+  async processJSONFile(file) {
+    try {
+      const content = await file.text()
+      const installedDeps = await installMultipleDeps(JSON.parse(content || `{}`)?.dependencies || {})
+      this.state.deps = [...this.state.deps, ...installedDeps]
+      initDependencies(this.state.deps)
+    
+      this.renderMap()
+    } catch (e) {
+      console.log(e)
+      toast('Failed in reading file content')
+    }
   }
   async renderMap () {
     const job = ++this.job;

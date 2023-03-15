@@ -35,7 +35,7 @@ export async function getESModuleShimsScript (integrity) {
     url,
     integrity: integrity ? await getIntegrity(url) : '',
     crossorigin: true,
-    comment: 'ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+)'
+    comment: 'ES Module Shims: Import maps polyfill for modules browsers without import maps support (Safari 16.3)'
   }];
 }
 

@@ -287,11 +287,31 @@ input:invalid {
   padding: 0.35em 0.65em;
 }
 
+/* package.json */
+.sidebar .package-json {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0em 1em;
+  border-width: 1px;
+  border: 1px solid #ededed;
+}
+
+.sidebar .package-json button {
+  flex: 1;
+}
+
+.sidebar .package-json p {
+  flex: 2;
+  color:#787878;
+  font-size: 0.9em;
+}
+
 /* dependencies */
 .sidebar .dependencies {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 19em);
+  height: calc(100% - 23em);
   overflow-y: auto;
   padding-top: 2px;
 }
@@ -508,7 +528,6 @@ select-box .options {
   position: absolute;
   top: calc(100% - 15em - 5px);
   width: 100%;
-  border-top: 1px solid #ededed;
 }
 .sidebar .button-cols {
   display: flex;

@@ -1,6 +1,6 @@
 import { toast } from './toast.js';
 
-let crypto, Semver, Generator, lookup, getPackageConfig;
+let crypto, Semver, Generator, lookup, getPackageConfig, generator;
 const initPromise = (async () => {
   [
     { Semver },
@@ -9,7 +9,7 @@ const initPromise = (async () => {
   ] = await Promise.all([
     import('sver'),
     import('@jspm/generator'),
-    import('@jspm/core/nodelibs/crypto')
+    import('@jspm/core/nodelibs/crypto'),
   ]);
 })();
 
@@ -60,7 +60,7 @@ export async function getSystemScripts (integrity) {
 
 export async function getMap (deps, integrity, doPreload, env) {
   await initPromise;
-  const generator = new Generator({
+  generator = new Generator({
     env: Object.keys(env).filter(key => env[key])
   });
 
@@ -135,4 +135,25 @@ export async function getExports (name, version) {
     toast(`Error: Unable to load package configuration for ${name}@${version}.`);
   else
     return Object.keys(pcfg.exports).filter(expt => !expt.endsWith('!cjs') && !expt.endsWith('/') && expt.indexOf('*') === -1).sort();
+}
+
+export async function installMultipleDeps(deps) {
+  await initPromise;
+  const depKeys = Object.keys(deps)
+  const installedDeps = []
+
+  const progressBar = document.querySelector('progress-bar.main');
+  progressBar.setEstimate(10000);
+    
+
+  for (let i = 0; i < depKeys.length; i++) {
+    const dep = `${depKeys[i]}@${String(deps[depKeys[i]]).match(/\d+(\.\d+)+/gm)[0]}`
+    await generator.install(dep)
+    progressBar.addWork();
+    installedDeps.push([dep, true])
+  }
+
+
+  progressBar.complete()
+  return installedDeps
 }

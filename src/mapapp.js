@@ -4,8 +4,17 @@ import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
 import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
-import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
+import { getESModuleShimsScript, getSystemScripts, getMap, installMultipleDeps } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
+
+let DragDrop
+const initPromise = (async () => {
+  [
+    { default: DragDrop }
+  ] = await Promise.all([
+    import('drag-drop')
+  ]);
+})();
 
 const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
   const nl = minify ? '' : '\n';
@@ -21,7 +30,7 @@ const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, prelo
     mapType = 'importmap';
   }
   const injection = `${
-    map ? `\n<!--\n  JSPM Generator Import Map\n  Edit URL: ${editUrl}\n-->\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
+    map ? `\n<!--\n  JSPM Generator Import Map\n  Edit URL: ${editUrl}\n-->\n <script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
   }${nl}${
     scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, async, module, comment, crossorigin }) =>
       `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${async ? 'async ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}${crossorigin ? ' crossorigin="anonymous"' : ''}></script>${hidden ? ' -->' : ''}`
@@ -97,6 +106,16 @@ class ImportMapApp {
         this.renderMap();
       }
     });
+    document.querySelector('#btn-upload-package-json').addEventListener('click', () => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = 'application/JSON'
+      input.onchange = async () => {
+        const file =   Array.from(input.files)[0];
+        this.processJSONFile(file)
+      }
+      input.click();
+    });
     onDepChange(newDeps => {
       if (JSON.stringify(newDeps) === JSON.stringify(this.state.deps))
         return;
@@ -120,9 +139,48 @@ class ImportMapApp {
         this.renderMap();
       }
     });
+
+    window.addEventListener('load', () => {
+      this.initDragDrop()
+    })
     this.state = initState;
     this.firstRender = true;
     this.renderMap();
+  }
+  
+  async initDragDrop() {
+    await initPromise
+    const elm = document.getElementById('drop-target')
+    if (!elm) {
+      return
+    }
+  
+    DragDrop('#drop-target', {
+      onDragEnter: () => {
+        elm.style.border = '1px dashed red'
+      },
+      onDrop: async (files) => {
+        const file = files.find((file) => file.type === 'application/json')
+        this.processJSONFile(file)
+      },
+      onDragLeave: () => {
+        elm.style.border = '1px solid #ededed'
+      }
+    })
+  }
+  
+  async processJSONFile(file) {
+    try {
+      const content = await file.text()
+      const installedDeps = await installMultipleDeps(JSON.parse(content || `{}`)?.dependencies || {})
+      this.state.deps = [...this.state.deps, ...installedDeps]
+      initDependencies(this.state.deps)
+    
+      this.renderMap()
+    } catch (e) {
+      console.log(e)
+      toast('Failed in reading file content')
+    }
   }
   async renderMap () {
     const job = ++this.job;

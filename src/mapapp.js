@@ -170,18 +170,40 @@ class ImportMapApp {
   }
   
   async processJSONFile(file) {
+    let content;
     try {
-      const content = await file.text()
-      const installedDeps = await installMultipleDeps(JSON.parse(content || `{}`)?.dependencies || {})
+      content = await file.text();
+    } catch (e) {
+      toast('Failed to read contents of file.');
+
+      console.error(e)
+      return;
+    }
+
+    let json;
+    try {
+      json = JSON.parse(content || {});
+    } catch (e) {
+      toast('File contents were not valid JSON.');
+
+      console.error(e);
+      return;
+    }
+
+    try {
+      const installedDeps = await installMultipleDeps(json?.dependencies || {})
       this.state.deps = [...this.state.deps, ...installedDeps]
       initDependencies(this.state.deps)
-    
-      this.renderMap()
     } catch (e) {
-      console.log(e)
-      toast('Failed in reading file content')
+      toast('Internal generator error.');
+
+      console.error(e);
+      return;
     }
+
+    this.renderMap();
   }
+
   async renderMap () {
     const job = ++this.job;
 

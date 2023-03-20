@@ -195,7 +195,7 @@ class ImportMapApp {
       this.state.deps = [...this.state.deps, ...installedDeps]
       initDependencies(this.state.deps)
     } catch (e) {
-      toast('Internal generator error.');
+      toast(e);
 
       console.error(e);
       return;

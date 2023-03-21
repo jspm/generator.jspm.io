@@ -21,7 +21,7 @@
       "@jspm/core/nodelibs/buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/buffer.js",
       "@jspm/core/nodelibs/crypto": "https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/crypto.js",
       "@jspm/core/nodelibs/zlib": "https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/zlib.js",
-      "@jspm/generator": "https://ga.jspm.io/npm:@jspm/generator@1.0.2/dist/generator.js",
+      "@jspm/generator": "https://ga.jspm.io/npm:@jspm/generator@1.1.1/dist/generator.js",
       "drag-drop": "https://ga.jspm.io/npm:drag-drop@7.2.0/index.js",
       "sver": "https://ga.jspm.io/npm:sver@1.8.3/sver.js"
     },
@@ -108,6 +108,9 @@
     },
     "https://ga.jspm.io/npm:@babel/generator@7.20.14/": {
       "@jridgewell/gen-mapping": "https://ga.jspm.io/npm:@jridgewell/gen-mapping@0.3.2/dist/gen-mapping.umd.js"
+    },
+    "https://ga.jspm.io/npm:@jspm/generator@1.1.1/": {
+      "#fetch": "https://ga.jspm.io/npm:@jspm/generator@1.1.1/dist/fetch-native.js"
     }
   }
 }
@@ -115,7 +118,7 @@
 <link rel="modulepreload" href="src/api.js" integrity="sha384-+0A/uzmjeImNAWXWRc8bXfWjJ7knxA3ADQckGVfUKNyJ0b767AY/lty4ibLcNBOU" />
 <link rel="modulepreload" href="src/dependencies.js" integrity="sha384-vYLWmTRHa96ifozdcskONBTCcmquDaddfNnfdQJyae4gOrpP52ma54wrm8K10xH/" />
 <link rel="modulepreload" href="src/help.js" integrity="sha384-yrnrCIA+FRZadLb+0SteCSr/m9puRhq94E2sG97ckVPfcqGdLf2usVlciueg3ynG" />
-<link rel="modulepreload" href="src/mapapp.js" integrity="sha384-WIRASUrfOBXXH3kr/I10zXGXSZ41tyNaCv93XpZzsrPkovyQPN/vK8Ge50KenT66" />
+<link rel="modulepreload" href="src/mapapp.js" integrity="sha384-Uei6HnOzlv9BoGvs6fi0rFYhobisrvYQP5Ri+2zP0z+Wl5VBuP335XEcivbYgXZE" />
 <link rel="modulepreload" href="src/popup.js" integrity="sha384-Ll4Kt2YDaGYi/X02OGxM9+J+I942EDdOYxaVx43nFt2wfSHpnnWiHwZ43RkbCMsA" />
 <link rel="modulepreload" href="src/progress.js" integrity="sha384-5fPEG5cu2BN1BcBbsGEybmm2IQ/wwZhl0cgGMyW//6Fj7e78dfZKkNEvWLrP6T55" />
 <link rel="modulepreload" href="src/select.js" integrity="sha384-yROtkvmqMubW+DvUczrE5N31/jwcQVMaSlZnPFTpnOyfZ3vR9tLqaPYzXyo55RL5" />
@@ -211,9 +214,10 @@
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/url.js" integrity="sha384-ArK4+HJ95qHsQpJ2arB26p6nml3/Hc5zPVU7R2EWI8KMFuUnRSe7K5R/o/bq5BRz" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/util.js" integrity="sha384-e0L8GAbX8RLCXLKmt2Lx8u0y6HbAgeLzxoq2tnmT5k1EwKGMxPnS2ZSUkjwfoLPF" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/zlib.js" integrity="sha384-PbteLxCMWvbYRl0pxDP3grp1nHOmNdTSrt/JhMHU6CAawHiwvpZdppzNVrOoswji" />
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.0.2/_/2a0f1be2.js" integrity="sha384-F9AHPSdDAqYa1Tm1uRCqsDyC0QU+0oXs05TbQKqo2Tqt72cEU06MhCuX4RsHCvFJ" />
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.0.2/dist/fetch-native.js" integrity="sha384-tIqZEF7Nj0nWaQQCUHbAD2y1zy+iOlSAZfMgXAi9lC3pekax0TJgs4LVyqxF+JQA" />
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.0.2/dist/generator.js" integrity="sha384-npIqbi1F8ZhcwRJ6IcByihlydTVMXlRBMpDxOWxi3is71uG9dQNHkyrj9RTXx2ys" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.1/_/66eaa312.js" integrity="sha384-PVQvc3vzUmQbyAIueJ7RN6BMUmIQ5DB1Lyk0qPv0ZyIPSNctvfyz2amGC5HVAwGP" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.1/_/69daafc4.js" integrity="sha384-CTj1h5v0JGNVs6tjN2U/CttD69WAzeUrFDFqc6qSCIbf9rQQU+EZM6x/bVcqYzbd" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.1/dist/fetch-native.js" integrity="sha384-mZw83/szblAR7mrQmn5pAjjnU3aMpHsXsbLm3m0pPiNKSdjnb8A1dUgLgQUyfVck" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.1/dist/generator.js" integrity="sha384-8lfSh2O16g2QZXU+Unyej56IV4SpoDJhmfTYJdOMxU4y8x7oOVuJxPAAafTXHMRB" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/import-map@1.0.4/dist/map.js" integrity="sha384-WoB+ysR1mIZik9xNZ2cpZz0RWxRjIwWELDqHUxAlKqYUCiQehJYX8KX2//dh03aY" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:ansi-styles@3.2.1/index.js" integrity="sha384-gu6XJ9SnN694nz3ckJE3l4NcdbMOgNrPMF30eHaSljYstk50ZIBVdyR6mlSBp6nS" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:browserslist@4.21.5/browser.js" integrity="sha384-cRF1ToirKrnpvmS50I33fJ2RGl1U8Y3iszobJHFkZXpWsA1XxCDNm/0LLt/B1+yT" />

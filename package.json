@@ -2,7 +2,7 @@
   "name": "mapapp",
   "exports": "./src/mapapp.js",
   "devDependencies": {
-    "@jspm/generator": "^1.1.1",
+    "@jspm/generator": "^1.1.3",
     "mkdirp": "^1.0.4"
   }
 }

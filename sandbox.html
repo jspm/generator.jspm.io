@@ -124,10 +124,10 @@
   }
 }
 </script>
-<link rel="modulepreload" href="src/api.js" integrity="sha384-qcWZT0q0o0Fyevsf8VBrSoJNs4y1Eg7233tkp+9rfu+PJ7LCo5FukvRLTf3b9PV9" />
-<link rel="modulepreload" href="src/dependencies.js" integrity="sha384-F2ydCDqKr2No6fObZ8ogGqZDJFrcLy20+MNlaSKiaTrpcSXcDi9uHrw137DwGuFH" />
+<link rel="modulepreload" href="src/api.js" integrity="sha384-RkQM2/RBIDUcgARuURLij3aWfdeElb2Q/Z9XX1f+uiKcu51BeMh4KBWuUxDq3BQk" />
+<link rel="modulepreload" href="src/dependencies.js" integrity="sha384-EcNhUK4/CuFZUB6OKzwlymtOcvHfDoS4N+5fxDPnOOvZWMX3IFzrMTEebtqLFt0x" />
 <link rel="modulepreload" href="src/help.js" integrity="sha384-d244q/VySEmc3p8a7YO6ximIIgXZIl+FHb6dW+2SyuT/rS1Y3FdZMBEnmqgXQRuW" />
-<link rel="modulepreload" href="src/mapapp.js" integrity="sha384-4YTKS4zONikcF98EoXS7IM/dc7T/eNTajatb59QtziSu8fCe7ZNgqqyUNCNdgb2d" />
+<link rel="modulepreload" href="src/mapapp.js" integrity="sha384-AzjpEK7+ljGAXe6AajpPxv246E/PvQ/cc5UkZcTqo+qrwwOZru4diR2dc4C7OF07" />
 <link rel="modulepreload" href="src/popup.js" integrity="sha384-eAIB1qd/WZPTkaiGsdUNK8bn3jYrO6F4I2VoN8cGRp0A/H26hhGzNgORn0Fanbus" />
 <link rel="modulepreload" href="src/progress.js" integrity="sha384-6qUAaZ+DASZ6MbRyvRBIWstyAJpRtmwC2aPfSQK+FL74u4jWo40CLvthGxKAB6Og" />
 <link rel="modulepreload" href="src/select.js" integrity="sha384-geSJTRLFYrqX0eSBC0pCwvyRz10/e+bEoDQV25LEY3+O18svIs0Lt3OlVftGEuuh" />
@@ -287,12 +287,13 @@
     <div class="add">
       <input type="search" class="depbox" title='Add a new dependency. For example: "react", "lit-element@2", "lodash/sort".' placeholder="Add Dependency" spellcheck=false pattern="(\w+:)?(@[^\/:\\]+\/)?[^\/:\\]+(@[^\/:]+)?(\/.*[^\/])?" />
     </div>
-    <div class="dependencies nopreload" id="drop-target">
-      <progress-bar class="deps"></progress-bar>
-      <div class="dependencies-container"></div>
-    </div>
-    <div class="package-json">
-       <button id="btn-upload-package-json" type="button" title="Upload package.json">
+    <div id="drop-target">
+      <div class="dependencies nopreload">
+        <progress-bar class="deps"></progress-bar>
+        <div class="dependencies-container"></div>
+      </div>
+      <div class="package-json">
+        <button id="btn-upload-package-json" type="button" title="Upload package.json">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6.39198 0.608017C6.1755 0.391531 5.8245 0.391531 5.60802 0.608017L2.08017 4.13587C1.86368 4.35235 1.86368 4.70335 2.08017 4.91983C2.29665 5.13632 2.64765 5.13632 2.86413 4.91983L6 1.78397L9.13587 4.91983C9.35235 5.13632 9.70335 5.13632 9.91983 4.91983C10.1363 4.70335 10.1363 4.35235 9.91983 4.13587L6.39198 0.608017ZM6.55435 9L6.55435 1L5.44565 1L5.44565 9L6.55435 9Z" fill="#7B7B7B"/>
           <path d="M11 8.99991V9.99991C11 10.5522 10.5523 10.9999 10 10.9999H2C1.44772 10.9999 1 10.5522 1 9.99991V8.99991" stroke="#7B7B7B"/>

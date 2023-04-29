@@ -149,24 +149,27 @@ class ImportMapApp {
   }
   
   async initDragDrop() {
-    await initPromise
-    const elm = document.getElementById('drop-target')
+    await initPromise;
+    const elm = document.getElementById('drop-target');
     if (!elm) {
       return
     }
   
     DragDrop('#drop-target', {
       onDragEnter: () => {
-        elm.style.border = '1px dashed red'
+        elm.style.border = '1px dashed red';
       },
       onDrop: async (files) => {
-        const file = files.find((file) => file.type === 'application/json')
-        this.processJSONFile(file)
+        const file = files.find((file) => file.type === 'application/json');
+        this.processJSONFile(file);
       },
       onDragLeave: () => {
-        elm.style.border = '1px solid #ededed'
+        elm.style.borderLeft = '1px solid #fff';
+        elm.style.borderRight = '1px solid #fff';
+        elm.style.borderTop = '1px solid #ededed';
+        elm.style.borderBottom = '1px solid #ededed';
       }
-    })
+    });
   }
   
   async processJSONFile(file) {
@@ -191,9 +194,9 @@ class ImportMapApp {
     }
 
     try {
-      const installedDeps = await installMultipleDeps(json?.dependencies || {})
-      this.state.deps = [...this.state.deps, ...installedDeps]
-      initDependencies(this.state.deps)
+      const installedDeps = await installMultipleDeps(json?.dependencies || {});
+      this.state.deps = [...this.state.deps, ...installedDeps];
+      initDependencies(this.state.deps);
     } catch (e) {
       toast(e);
 

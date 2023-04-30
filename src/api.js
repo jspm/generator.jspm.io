@@ -139,21 +139,33 @@ export async function getExports (name, version) {
 
 export async function installMultipleDeps(deps) {
   await initPromise;
-  const depKeys = Object.keys(deps)
-  const installedDeps = []
+  const installedDeps = [];
 
+  // resolve dependency names and versions
   const progressBar = document.querySelector('progress-bar.main');
   progressBar.setEstimate(10000);
-    
 
-  for (let i = 0; i < depKeys.length; i++) {
-    const dep = `${depKeys[i]}@${String(deps[depKeys[i]]).match(/\d+(\.\d+)+/gm)[0]}`
-    await generator.install(dep)
+  for (let [name, range] of Object.entries(deps)) {
+    let version;
+    // latest version lookup
+    if (range === '*' || range === 'latest' || range.startsWith('^') || range.startsWith('~')) {
+      let err;
+      ({ name, version, err } = await resolvePkg(name + '@' + range));
+      if (err)
+        throw err;
+    }
+    // invalid registry pointer
+    else if (range.includes(':')) {
+      throw new Error(`Alternative registry references not supported, installing ${name} = ${range}`);
+    }
+    // exact version / tag
+    else {
+      version = range;
+    }
     progressBar.addWork();
-    installedDeps.push([dep, true])
+    installedDeps.push([name + '@' + version]);
   }
 
-
-  progressBar.complete()
-  return installedDeps
+  progressBar.complete();
+  return installedDeps;
 }

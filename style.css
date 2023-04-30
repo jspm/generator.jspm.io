@@ -142,6 +142,7 @@ a {
 
 /* select box */
 select-box {
+  display: block;
   overflow: hidden;
   font-size: 14px;
   color: #787878;

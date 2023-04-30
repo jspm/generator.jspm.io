@@ -18,6 +18,19 @@ const OUTPUT_INTEGRITY = 0x100;
 const OUTPUT_PRELOAD = 0x200;
 const ENV_MODULE = 0x400;
 const ENV_DENO = 0x800;
+const PROVIDER_SHIFT = 15;
+
+const providers = ['jspm.io', 'esm.sh', 'unpkg', 'jsdelivr'];
+function getProvider (providerName) {
+  const providerIndex = providers.indexOf(providerName);
+  if (providerIndex === -1)
+    throw new Error('Cannot serialize provider ' + providerName);
+  return providerIndex;
+}
+
+function getProviderName (providerIndex) {
+  return providers[providerIndex];
+}
 
 const BIT1 = 0x1;
 const BIT2 = 0x2;
@@ -41,7 +54,8 @@ function compressState (state) {
     state.output.minify * OUTPUT_MINIFY |
     state.output.json * OUTPUT_JSON |
     state.output.integrity * OUTPUT_INTEGRITY |
-    state.output.preload * OUTPUT_PRELOAD;
+    state.output.preload * OUTPUT_PRELOAD |
+    (getProvider(state.provider) << PROVIDER_SHIFT);
   const strs = state.name + '\0' + state.deps.map(dep => dep[0]).join('\0');
   const strBuffer = new TextEncoder().encode(strs);
   const bitFieldBuffer = new Buffer(4);
@@ -99,6 +113,7 @@ function decompressState (buffer) {
   return {
     name,
     deps,
+    provider: getProviderName((bitField >> PROVIDER_SHIFT) & 0xf),
     env: {
       development: bitField & ENV_DEVELOPMENT ? true : false,
       production: bitField & ENV_PRODUCTION ? true : false,

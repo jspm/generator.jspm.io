@@ -124,14 +124,15 @@
   }
 }
 </script>
-<link rel="modulepreload" href="src/api.js" integrity="sha384-RkQM2/RBIDUcgARuURLij3aWfdeElb2Q/Z9XX1f+uiKcu51BeMh4KBWuUxDq3BQk" />
+<link rel="modulepreload" href="src/api.js" integrity="sha384-UDAJh4U8crhAEzEPYFdFOuYWI7JO3resglrA3+MiLbPTLOCye2vxZSj6xoRnMtmj" />
 <link rel="modulepreload" href="src/dependencies.js" integrity="sha384-EcNhUK4/CuFZUB6OKzwlymtOcvHfDoS4N+5fxDPnOOvZWMX3IFzrMTEebtqLFt0x" />
+<link rel="modulepreload" href="src/dragdrop.js" integrity="sha384-1ZIc6rpRRP6dZzID7shWFlaU/KtioKHzIOMRE555caIobTcyV6f+iMuXSJLn9d0L" />
 <link rel="modulepreload" href="src/help.js" integrity="sha384-d244q/VySEmc3p8a7YO6ximIIgXZIl+FHb6dW+2SyuT/rS1Y3FdZMBEnmqgXQRuW" />
-<link rel="modulepreload" href="src/mapapp.js" integrity="sha384-WJOuwZA/gkpPKp+6FQ3L41ryA3l97UzWsw9uPgyZOUsY23HwfB0n6ujZpz2XSzYB" />
+<link rel="modulepreload" href="src/mapapp.js" integrity="sha384-rTqGECEPzAAPhVJjAuKnGgVwFefoNMlaMhr+ax7QlHgxAEYMSeosJrfy7arMTHrZ" />
 <link rel="modulepreload" href="src/popup.js" integrity="sha384-eAIB1qd/WZPTkaiGsdUNK8bn3jYrO6F4I2VoN8cGRp0A/H26hhGzNgORn0Fanbus" />
 <link rel="modulepreload" href="src/progress.js" integrity="sha384-6qUAaZ+DASZ6MbRyvRBIWstyAJpRtmwC2aPfSQK+FL74u4jWo40CLvthGxKAB6Og" />
 <link rel="modulepreload" href="src/select.js" integrity="sha384-geSJTRLFYrqX0eSBC0pCwvyRz10/e+bEoDQV25LEY3+O18svIs0Lt3OlVftGEuuh" />
-<link rel="modulepreload" href="src/statehash.js" integrity="sha384-hTcFJmOaOnFT6vuM5ECdz+dLldI7kxdIgKEUVTBraMsRQKo8fKHb/Bxs2UvvMKvY" />
+<link rel="modulepreload" href="src/statehash.js" integrity="sha384-mN9mEjHvoGw0anNynmm3dXzuB9dN6OHznZykwbaSPPWh5EaIOw2hnnmTnXT0JKUp" />
 <link rel="modulepreload" href="src/toast.js" integrity="sha384-dmSV8ylbAx9joKxGkx9MjWbkuIPtV9VoYnfspun6SEKZiPBzweaEQXs/4u4xDzF6" />
 <link rel="modulepreload" href="src/utils.js" integrity="sha384-bUtKyNa3eGNuYAS937FAMobCGO2lT/NYgc4lvMvWD7hvK8B4MSrd+QhOrEtJHOpK" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@ampproject/remapping@2.2.0/dist/remapping.mjs" integrity="sha384-EuwQUp17rHl3YtbvFAwElkf4Plh6bxlQpTSf+aC3nxDhnl1hPSXN/rXc7xHi7Vc/" />
@@ -414,6 +415,17 @@
         <div class="layer"></div>
       </div>
       <label class="label" for="map-preload" title="Inject link preload tags for dependencies.">Preload</label>
+    </div>
+    <div class="provider">
+      <select-box class="borderless provider">
+        <div class="selected"><span>jspm.io</span></div>
+        <div class="options">
+          <div class="option"><span>jspm.io</span></div>
+          <div class="option"><span>esm.sh</span></div>
+          <div class="option"><span>unpkg</span></div>
+          <div class="option"><span>jsdelivr</span></div>
+        </div>
+      </select-box>
     </div>
     <div class="end">
       <button id="btn-copy" type="button" title="Copy the generated map above to the clipboard.">

@@ -166,7 +166,7 @@ class ImportMapApp {
       onDragLeave: () => {
         elm.style.borderLeft = '1px solid #fff';
         elm.style.borderRight = '1px solid #fff';
-        elm.style.borderTop = '1px solid #ededed';
+        elm.style.borderTop = '1px solid #fff';
         elm.style.borderBottom = '1px solid #ededed';
       }
     });

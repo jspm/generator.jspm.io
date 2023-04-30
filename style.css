@@ -367,7 +367,7 @@ input:invalid {
 #drop-target {
   flex: none;
   height: calc(100% - 18.5em);
-  border-top: 1px solid #ededed;
+  border-top: 1px solid #fff;
   border-bottom: 1px solid #ededed;
   border-right: 1px solid #fff;
   border-left: 1px solid #fff;

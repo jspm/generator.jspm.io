@@ -58,10 +58,11 @@ export async function getSystemScripts (integrity) {
   ];
 }
 
-export async function getMap (deps, integrity, doPreload, env) {
+export async function getMap (deps, integrity, doPreload, env, provider) {
   await initPromise;
   generator = new Generator({
-    env: Object.keys(env).filter(key => env[key])
+    env: Object.keys(env).filter(key => env[key]),
+    defaultProvider: provider
   });
 
   // the static graph always takes preload priority
@@ -137,7 +138,7 @@ export async function getExports (name, version) {
     return Object.keys(pcfg.exports).filter(expt => !expt.endsWith('!cjs') && !expt.endsWith('/') && expt.indexOf('*') === -1).sort();
 }
 
-export async function installMultipleDeps(deps) {
+export async function installFromDependencies(deps) {
   await initPromise;
   const installedDeps = [];
 

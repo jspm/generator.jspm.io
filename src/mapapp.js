@@ -4,17 +4,9 @@ import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
 import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
-import { getESModuleShimsScript, getSystemScripts, getMap, installMultipleDeps } from './api.js';
+import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
-
-let DragDrop
-const initPromise = (async () => {
-  [
-    { default: DragDrop }
-  ] = await Promise.all([
-    import('drag-drop')
-  ]);
-})();
+import './dragdrop.js';
 
 const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
   const nl = minify ? '' : '\n';
@@ -73,6 +65,8 @@ class ImportMapApp {
       check.addEventListener('change', this.envChange.bind(this));
     for (const outputOption of document.querySelectorAll('.buttonbar .checkbox'))
       outputOption.addEventListener('change', this.outputChange.bind(this));
+    this.$providerSelector = document.querySelector('.provider select-box');
+    this.$providerSelector.addEventListener('change', this.providerChange.bind(this));
     document.querySelector('#btn-copy').addEventListener('click', () => {
       if (!this.code) {
         toast('Nothing to copy.');
@@ -140,70 +134,13 @@ class ImportMapApp {
       }
     });
 
-    window.addEventListener('load', () => {
-      this.initDragDrop()
-    })
     this.state = initState;
     this.firstRender = true;
     this.renderMap();
   }
-  
-  async initDragDrop() {
-    await initPromise;
-    const elm = document.getElementById('drop-target');
-    if (!elm) {
-      return
-    }
-  
-    DragDrop('#drop-target', {
-      onDragEnter: () => {
-        elm.style.border = '1px dashed red';
-      },
-      onDrop: async (files) => {
-        const file = files.find((file) => file.type === 'application/json');
-        this.processJSONFile(file);
-      },
-      onDragLeave: () => {
-        elm.style.borderLeft = '1px solid #fff';
-        elm.style.borderRight = '1px solid #fff';
-        elm.style.borderTop = '1px solid #fff';
-        elm.style.borderBottom = '1px solid #ededed';
-      }
-    });
-  }
-  
-  async processJSONFile(file) {
-    let content;
-    try {
-      content = await file.text();
-    } catch (e) {
-      toast('Failed to read contents of file.');
 
-      console.error(e)
-      return;
-    }
-
-    let json;
-    try {
-      json = JSON.parse(content || {});
-    } catch (e) {
-      toast('File contents were not valid JSON.');
-
-      console.error(e);
-      return;
-    }
-
-    try {
-      const installedDeps = await installMultipleDeps(json?.dependencies || {});
-      this.state.deps = [...this.state.deps, ...installedDeps];
-      initDependencies(this.state.deps);
-    } catch (e) {
-      toast(e);
-
-      console.error(e);
-      return;
-    }
-
+  providerChange (e) {
+    this.state.provider = e.detail.new;
     this.renderMap();
   }
 
@@ -259,6 +196,7 @@ class ImportMapApp {
     document.title = this.state.name + ' - Import Map Generator - JSPM.IO';
     document.querySelector('.title input').value = this.state.name;
 
+    this.$providerSelector.set(this.state.provider);
     for (const check of document.querySelectorAll('.env .checkbox'))
       check.checked = this.state.env[check.id.slice(4)];
     for (const outputOption of document.querySelectorAll('.buttonbar .checkbox')) {
@@ -275,7 +213,7 @@ class ImportMapApp {
       await new Promise(resolve => setTimeout(resolve, 300));
       if (this.job !== job) return;
 
-      let { map, preloads } = await getMap(this.state.deps, this.state.output.integrity, this.state.output.preload, this.state.env);
+      let { map, preloads } = await getMap(this.state.deps, this.state.output.integrity, this.state.output.preload, this.state.env, this.state.provider);
 
       const scripts = this.state.output.system ? await getSystemScripts(this.state.output.integrity) : await getESModuleShimsScript(this.state.output.integrity);
 
@@ -410,8 +348,9 @@ class ImportMapApp {
   }
 }
 
-new ImportMapApp({
+export default new ImportMapApp({
   name: 'Untitled',
+  provider: 'jspm.io',
   deps: [],
   env: {
     development: true,

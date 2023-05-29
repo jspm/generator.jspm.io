@@ -874,9 +874,22 @@ screen and (max-device-width: 1050px) {
   .buttonbar .button-box:nth-child(1) {
     display: none;
   }
+  .buttonbar select-box {
+    display: none;
+  }
 }
 @media screen and (max-width: 800px),
 screen and (max-device-width: 800px) {
+  #drop-target {
+    overflow-y: auto;
+    height: calc(100% - 20em);
+  }
+  #drop-target .package-json {
+    display: none;
+  }
+  #drop-target .dependencies {
+    height: auto;
+  }
   .topbuttons .buttonbar {
     border-top: 1px solid #ededed;
     display: flex;

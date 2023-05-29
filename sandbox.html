@@ -33,7 +33,7 @@
       "@jspm/core/nodelibs/buffer": "https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/buffer.js",
       "@jspm/core/nodelibs/crypto": "https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/crypto.js",
       "@jspm/core/nodelibs/zlib": "https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/zlib.js",
-      "@jspm/generator": "https://ga.jspm.io/npm:@jspm/generator@1.1.8/dist/generator.js",
+      "@jspm/generator": "https://ga.jspm.io/npm:@jspm/generator@1.1.9/dist/generator.js",
       "drag-drop": "https://ga.jspm.io/npm:drag-drop@7.2.0/index.js",
       "sver": "https://ga.jspm.io/npm:sver@1.8.4/sver.js"
     },
@@ -132,6 +132,9 @@
     },
     "https://ga.jspm.io/npm:@jspm/generator@1.1.8/": {
       "#fetch": "https://ga.jspm.io/npm:@jspm/generator@1.1.8/dist/fetch-native.js"
+    },
+    "https://ga.jspm.io/npm:@jspm/generator@1.1.9/": {
+      "#fetch": "https://ga.jspm.io/npm:@jspm/generator@1.1.9/dist/fetch-native.js"
     }
   }
 }
@@ -236,10 +239,10 @@
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/url.js" integrity="sha384-ArK4+HJ95qHsQpJ2arB26p6nml3/Hc5zPVU7R2EWI8KMFuUnRSe7K5R/o/bq5BRz" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/util.js" integrity="sha384-e0L8GAbX8RLCXLKmt2Lx8u0y6HbAgeLzxoq2tnmT5k1EwKGMxPnS2ZSUkjwfoLPF" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/core@2.0.0/nodelibs/browser/zlib.js" integrity="sha384-PbteLxCMWvbYRl0pxDP3grp1nHOmNdTSrt/JhMHU6CAawHiwvpZdppzNVrOoswji" />
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.8/_/317b3294.js" integrity="sha384-eO4MYGls/Un2F3tbNdblxFl6NqSDe8PelblsuDkfERYokEN/hrHjGtObAqVV7QqW" />
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.8/_/951b08c0.js" integrity="sha384-/RzWqPyHPLErEc6hbqYduihqQ5/JpwP40s6+LbWl7/EfpI8gd5/2qRQQd/MpMe7L" />
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.8/dist/fetch-native.js" integrity="sha384-eS3/YtyggsecoF+kT3gANZ74Vgpd3AUMvoVeoh5mntXq3zWr64kMyF0rNiJjBNi+" />
-<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.8/dist/generator.js" integrity="sha384-43X83BguroFJ3TP3WfWHe9PhZIhcZJKR8lbLL9FHJiuNyWu2AflDEOZcqOQLXff5" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.9/_/49983e01.js" integrity="sha384-bG13lE/0Gxstxqalq6CpOQJAWDSWtk8jZ7tE/8L6DgvaTzngxU1cfckcgdjGHeGX" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.9/_/b314f69e.js" integrity="sha384-q0zdCFwv8H5SViNtvG6K4morlpX4CmuaLmYPUFxxf3nJsmGOqMcd2GPHHWOZwa6I" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.9/dist/fetch-native.js" integrity="sha384-wAaZOPZSZ9d0QASg+DaXGfLdE6jzv++tQDdLmGTZEiv401bbzn9VIWU5D4K68XBm" />
+<link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/generator@1.1.9/dist/generator.js" integrity="sha384-a+EqutUQKeb9X1w3qeId9f63nuMbGmuO5jWixGanFSuIifXp6WI+wf/zs34cnfS8" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:@jspm/import-map@1.0.7/dist/map.js" integrity="sha384-eDACYU+eKlEge1+io+nD4iPJkxqVWy5J0wyh+Nma5DWX3VmHIBmoEwx7tS3lEC73" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:ansi-styles@3.2.1/index.js" integrity="sha384-gu6XJ9SnN694nz3ckJE3l4NcdbMOgNrPMF30eHaSljYstk50ZIBVdyR6mlSBp6nS" />
 <link rel="modulepreload" href="https://ga.jspm.io/npm:browserslist@4.21.5/browser.js" integrity="sha384-cRF1ToirKrnpvmS50I33fJ2RGl1U8Y3iszobJHFkZXpWsA1XxCDNm/0LLt/B1+yT" />
@@ -382,19 +385,27 @@
   <div class="buttonbar">
     <div class="button-box">
       <div class="button r">
-        <input type="checkbox" id="map-system" class="checkbox">
-        <div class="knobs"><div class="knob"></div></div>
-        <div class="layer"></div>
-      </div>
-      <label class="label" for="map-system" title="Create an import map of System modules to work in legacy browsers with SystemJS.">SystemJS</label>
-    </div>
-    <div class="button-box">
-      <div class="button r">
         <input type="checkbox" id="map-boilerplate" class="checkbox" checked>
         <div class="knobs"><div class="knob"></div></div>
         <div class="layer"></div>
       </div>
       <label class="label" for="map-boilerplate" title="Embed the import map output in a boilerplate HTML file.">HTML Boilerplate</label>
+    </div>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-preload" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="map-preload" title="Inject link preload tags for dependencies.">Preload</label>
+    </div>
+    <div class="button-box">
+      <div class="button r">
+        <input type="checkbox" id="map-integrity" class="checkbox">
+        <div class="knobs"><div class="knob"></div></div>
+        <div class="layer"></div>
+      </div>
+      <label class="label" for="map-integrity" title="Output the subresource integrity on the link preloads for all resources.">Integrity</label>
     </div>
     <div class="button-box">
       <div class="button r">
@@ -414,19 +425,11 @@
     </div>
     <div class="button-box">
       <div class="button r">
-        <input type="checkbox" id="map-integrity" class="checkbox">
+        <input type="checkbox" id="map-system" class="checkbox">
         <div class="knobs"><div class="knob"></div></div>
         <div class="layer"></div>
       </div>
-      <label class="label" for="map-integrity" title="Output the subresource integrity on the link preloads for all resources.">Integrity</label>
-    </div>
-    <div class="button-box">
-      <div class="button r">
-        <input type="checkbox" id="map-preload" class="checkbox">
-        <div class="knobs"><div class="knob"></div></div>
-        <div class="layer"></div>
-      </div>
-      <label class="label" for="map-preload" title="Inject link preload tags for dependencies.">Preload</label>
+      <label class="label" for="map-system" title="Create an import map of System modules to work in legacy browsers with SystemJS.">SystemJS</label>
     </div>
     <div class="provider">
       <select-box class="borderless provider">

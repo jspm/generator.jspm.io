@@ -215,7 +215,7 @@ class ImportMapApp {
 
       let { map, preloads } = await getMap(this.state.deps, this.state.output.integrity, this.state.output.preload, this.state.env, this.state.provider);
 
-      const scripts = this.state.output.system ? await getSystemScripts(this.state.output.integrity) : await getESModuleShimsScript(this.state.output.integrity);
+      const scripts = this.state.output.system ? await getSystemScripts(this.state.output.integrity, this.state.provider) : await getESModuleShimsScript(this.state.output.integrity, this.state.provider);
 
       if (this.state.output.system) {
         function systemReplace (url) {

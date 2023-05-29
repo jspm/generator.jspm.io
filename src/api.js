@@ -1,4 +1,5 @@
 import { toast } from './toast.js';
+import { SemverRange } from 'sver';
 
 let crypto, Semver, Generator, lookup, getPackageConfig, generator;
 const initPromise = (async () => {
@@ -26,34 +27,48 @@ export async function getIntegrity (url) {
   return integrity;
 }
 
-// TODO: version lookups
-export async function getESModuleShimsScript (integrity) {
-  // = resolvePkg + integrity()
-  const url = 'https://ga.jspm.io/npm:es-module-shims@1.5.1/dist/es-module-shims.js';
+let urlCache = {};
+
+export async function getESModuleShimsScript (integrity, provider) {
+  let esmsUrl = urlCache['esms-' + provider];
+  if (!esmsUrl) {
+    // TODO: make this achievable via the static API
+    const generator = new Generator();
+    const providerObj = { provider, layer: 'default' };
+    const esmsPkg = await generator.traceMap.resolver.resolveLatestTarget(
+      { name: "es-module-shims", registry: "npm", ranges: [new SemverRange("*")] },
+      providerObj,
+    );
+    esmsUrl = (await generator.traceMap.resolver.pkgToUrl(esmsPkg, providerObj)) + "dist/es-module-shims.js";
+    urlCache['esms-' + provider] = esmsUrl;
+  }
   return [{
     async: true,
-    url,
+    url: esmsUrl,
     integrity: integrity ? await getIntegrity(url) : '',
     crossorigin: true,
-    comment: 'ES Module Shims: Import maps polyfill for modules browsers without import maps support (Safari 16.3)'
+    comment: 'ES Module Shims: Import maps polyfill for olrder browsers without import maps support (eg Safari 16.3)'
   }];
 }
 
-export async function getSystemScripts (integrity) {
-  // = resolvePkg + integrity()
-  const systemUrl = 'https://ga.system.jspm.io/npm:systemjs@6.12.1/dist/s.min.js';
-  const systemBabelUrl = 'https://ga.system.jspm.io/npm:systemjs-babel@0.3.1/dist/systemjs-babel.js';
+export async function getSystemScripts (integrity, provider) {
+  let systemUrl = urlCache['system-' + provider];
+  if (!systemUrl) {
+    // TODO: make this achievable via the static API
+    const generator = new Generator();
+    const providerObj = { provider, layer: provider === 'jspm.io' ? 'system' : 'default' };
+    const systemPkg = await generator.traceMap.resolver.resolveLatestTarget(
+      { name: "systemjs", registry: "npm", ranges: [new SemverRange("*")] },
+      providerObj,
+    );
+    systemUrl = (await generator.traceMap.resolver.pkgToUrl(systemPkg, providerObj)) + "dist/s.min.js";
+    urlCache['system-' + provider] = systemUrl;
+  }
   return [
     {
       comment: 'SystemJS: Supports loading modules performantly in all browsers back to IE11 (depending on library support)',
       url: systemUrl,
       integrity: integrity ? await getIntegrity(systemUrl) : ''
-    },
-    {
-      hidden: true,
-      comment: 'Uncomment SystemJS Babel below for an in-browser ES Module / TypeScript / JSX dev workflow.',
-      url: systemBabelUrl,
-      integrity: integrity ? await getIntegrity(systemBabelUrl) : ''
     }
   ];
 }

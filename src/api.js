@@ -42,6 +42,11 @@ export async function getESModuleShimsScript (integrity, provider) {
     esmsUrl = (await generator.traceMap.resolver.pkgToUrl(esmsPkg, providerObj)) + "dist/es-module-shims.js";
     urlCache['esms-' + provider] = esmsUrl;
   }
+  // esm.sh gives a redirect URL so we need to rewrite it
+  if (provider === 'esm.sh') {
+    const esmsRedirect = await (await fetch(esmsUrl)).text();
+    esmsUrl = esmsRedirect.match(/\"([^\"]+)\"/)[1];
+  }
   return [{
     async: true,
     url: esmsUrl,

@@ -141,7 +141,7 @@ export async function getVersions (name) {
     return;
   }
   const json = await res.json();
-  return Object.keys(json.versions).sort(Semver.compare).reverse();
+  return Object.entries(json.versions).filter(([version, entry]) => !('deprecated' in entry)).map(([version, entry]) => version).sort(Semver.compare).reverse();
 }
 
 export async function getExports (name, version) {

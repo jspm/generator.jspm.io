@@ -50,7 +50,7 @@ export async function getESModuleShimsScript (integrity, provider) {
   return [{
     async: true,
     url: esmsUrl,
-    integrity: integrity ? await getIntegrity(url) : '',
+    integrity: integrity ? await getIntegrity(esmsUrl) : '',
     crossorigin: true,
     comment: 'ES Module Shims: Import maps polyfill for older browsers without import maps support (eg Safari 16.3)'
   }];

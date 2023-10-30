@@ -4,7 +4,7 @@ import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
 import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
-import { getESModuleShimsScript, getSystemScripts, getMap } from './api.js';
+import { getESModuleShimsScript, getSystemScripts, getMap, installFromDependencies } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
 import './dragdrop.js';
 
@@ -101,12 +101,30 @@ class ImportMapApp {
       }
     });
     document.querySelector('#btn-upload-package-json').addEventListener('click', () => {
-      const input = document.createElement('input')
-      input.type = 'file'
-      input.accept = 'application/JSON'
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/JSON';
       input.onchange = async () => {
-        const file =   Array.from(input.files)[0];
-        this.processJSONFile(file)
+        const file = Array.from(input.files)[0];
+        let json;
+        try {
+          json = JSON.parse(await file.text() || '');
+        } catch (e) {
+          toast('File contents were not valid JSON.');
+          console.error(e);
+          return;
+        }
+        try {
+          const installedDeps = await installFromDependencies(json?.dependencies || {});
+          this.state.deps = [...this.state.deps, ...installedDeps];
+          initDependencies(this.state.deps);
+        } catch (e) {
+          toast(e);
+          console.error(e);
+          return;
+        }
+    
+        this.renderMap();
       }
       input.click();
     });

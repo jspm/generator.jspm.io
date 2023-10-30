@@ -29,7 +29,7 @@ async function initDragDrop() {
   
       let json;
       try {
-        json = JSON.parse(content || {});
+        json = JSON.parse(content || '');
       } catch (e) {
         toast('File contents were not valid JSON.');
   

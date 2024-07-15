@@ -37,11 +37,12 @@ run = '''
     const generator = new Generator({
       cache: false,
       mapUrl: pathToFileURL(process.env.TARGET),
-      env: ["browser", "production", "module"]
+      env: ["browser", "production", "module"],
+      integrity: true
     });
 
     const htmlSource = await readFile(process.env.DEP, 'utf-8');
-    
+
     mkdirp.sync(dirname(process.env.TARGET));
     const pins = await generator.addMappings(htmlSource);
     await writeFile(process.env.TARGET, await generator.htmlInject(htmlSource, {

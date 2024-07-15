@@ -82,13 +82,14 @@ export async function getMap (deps, integrity, doPreload, env, provider) {
   await initPromise;
   generator = new Generator({
     env: Object.keys(env).filter(key => env[key]),
-    defaultProvider: provider
+    defaultProvider: provider,
+    integrity,
   });
 
   // the static graph always takes preload priority
   const staticPreloads = new Set();
   const dynPreloads = new Set();
-  
+
   for (const [dep, preload] of deps) {
     const { staticDeps, dynamicDeps } = await generator.install(dep);
     if (doPreload && preload) {
@@ -98,7 +99,7 @@ export async function getMap (deps, integrity, doPreload, env, provider) {
         dynPreloads.add(url);
     }
   }
-    
+
   const map = generator.getMap();
   map.imports = map.imports || {};
 

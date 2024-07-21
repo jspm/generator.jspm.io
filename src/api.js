@@ -112,8 +112,6 @@ export async function getMap (deps, integrity, doPreload, env, provider) {
     ...[...staticPreloads].sort(),
     ...[...dynPreloads].sort()
   ].map(async url => {
-    if (integrity)
-      return { url, integrity: await getIntegrity(url) };
     return { url };
   }));
   return { map, preloads };

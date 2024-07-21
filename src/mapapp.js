@@ -299,9 +299,6 @@ class ImportMapApp {
       document.querySelector('#map-json').checked = false;
       this.state.output.json = false;
     }
-    if (outputOption === 'integrity' && e.target.checked) {
-      this.state.output.preload = true;
-    }
     this.renderMap();
   }
   envChange (e) {

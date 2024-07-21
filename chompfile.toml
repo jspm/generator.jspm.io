@@ -15,7 +15,7 @@ run = 'npm install'
 [[task]]
 name = 'serve'
 deps = ['build']
-run = 'npx http-server -o /sandbox.html'
+run = 'npx http-server -c-1 -o /sandbox.html'
 
 [[task]]
 name = 'build'

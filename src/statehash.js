@@ -1,3 +1,5 @@
+import { scriptTemplate } from './mapapp.js';
+
 let zlib, Buffer;
 const initPromise = (async () => {
   [zlib, { Buffer }] = await Promise.all([import('@jspm/core/nodelibs/zlib'), import('@jspm/core/nodelibs/buffer')]);
@@ -49,7 +51,6 @@ function compressState (state) {
     state.env.node * ENV_NODE |
     state.env.module * ENV_MODULE |
     state.env.deno * ENV_DENO |
-    state.output.system * OUTPUT_SYSTEM |
     state.output.boilerplate * OUTPUT_BOILERPLATE |
     state.output.minify * OUTPUT_MINIFY |
     state.output.json * OUTPUT_JSON |
@@ -123,7 +124,6 @@ function decompressState (buffer) {
       deno: bitField & ENV_DENO ? true : false
     },
     output: {
-      system: bitField & OUTPUT_SYSTEM ? true : false,
       boilerplate: bitField & OUTPUT_BOILERPLATE ? true : false,
       minify: bitField & OUTPUT_MINIFY ? true : false,
       json: bitField & OUTPUT_JSON ? true : false,
@@ -158,6 +158,20 @@ export async function hashToState (hash) {
   return decompressState(zlib.gunzipSync(gzipped));
 }
 
-export async function getSandboxHash (code) {
-  return '#' + zlib.gzipSync(Buffer.from(code)).toString('base64');
+export async function getSandboxHash (name, importMap) {
+  return '#' + zlib.gzipSync(Buffer.from(JSON.stringify({
+    'importmap.js': `(map => {
+  const mapUrl = document.currentScript.src;
+  const resolve = imports => Object.fromEntries(Object.entries(imports).map(([k, v]) => [k, new URL(v, mapUrl).href]));
+  document.head.appendChild(Object.assign(document.createElement("script"), {
+    type: "importmap-shim",
+    innerHTML: JSON.stringify({
+      imports: resolve(map.imports),
+      scopes: Object.fromEntries(Object.entries(map.scopes).map(([k, v]) => [new URL(k, mapUrl).href, resolve(v)]))
+    })
+  }));
+})
+(${JSON.stringify(importMap, null, 2)});`,
+    'index.js': scriptTemplate(importMap),
+  }))).toString('base64');
 }

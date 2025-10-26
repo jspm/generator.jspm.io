@@ -56,28 +56,6 @@ export async function getESModuleShimsScript (integrity, provider) {
   }];
 }
 
-export async function getSystemScripts (integrity, provider) {
-  let systemUrl = urlCache['system-' + provider];
-  if (!systemUrl) {
-    // TODO: make this achievable via the static API
-    const generator = new Generator();
-    const providerObj = { provider, layer: provider === 'jspm.io' ? 'system' : 'default' };
-    const systemPkg = await generator.traceMap.resolver.resolveLatestTarget(
-      { name: "systemjs", registry: "npm", ranges: [new SemverRange("*")] },
-      providerObj,
-    );
-    systemUrl = (await generator.traceMap.resolver.pkgToUrl(systemPkg, providerObj)) + "dist/s.min.js";
-    urlCache['system-' + provider] = systemUrl;
-  }
-  return [
-    {
-      comment: 'SystemJS: Supports loading modules performantly in all browsers back to IE11 (depending on library support)',
-      url: systemUrl,
-      integrity: integrity ? await getIntegrity(systemUrl) : ''
-    }
-  ];
-}
-
 export async function getMap (deps, integrity, doPreload, env, provider) {
   await initPromise;
   generator = new Generator({

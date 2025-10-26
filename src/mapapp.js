@@ -4,44 +4,30 @@ import './help.js';
 import { highlight, copyToClipboard, download, getIdentifier } from './utils.js';
 import { toast } from './toast.js';
 import { getSandboxHash, hashToState, stateToHash } from './statehash.js';
-import { getESModuleShimsScript, getSystemScripts, getMap, installFromDependencies } from './api.js';
+import { getESModuleShimsScript, getMap, installFromDependencies } from './api.js';
 import { initDependencies, onDepChange } from './dependencies.js';
 import './dragdrop.js';
 
-const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, system, preloads, minify, integrity: useIntegrity }) => {
+export const scriptTemplate = (map) => `${
+    Object.keys(map.imports).map(specifier => `import * as ${getIdentifier(specifier)} from "${specifier}";`).join('\n')
+  }\n\nconsole.log(${Object.keys(map.imports).map(getIdentifier).join(', ')});\n`;
+
+const htmlTemplate = ({ editUrl, boilerplate, title, scripts, map, preloads, minify, integrity: useIntegrity }) => {
   const nl = minify ? '' : '\n';
-  let scriptType, linkType, mapType;
-  if (system) {
-    scriptType = 'systemjs-module';
-    linkType = 'script';
-    mapType = 'systemjs-importmap';
-  }
-  else {
-    scriptType = 'module';
-    linkType = 'modulepreload';
-    mapType = 'importmap';
-  }
   const injection = `${
-    map ? `\n<!--\n  Import map generated with JSPM Generator\n  Edit here: ${editUrl}\n-->\n<script type="${mapType}">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
+    map ? `\n<!--\n  Import map generated with JSPM Generator\n  Edit here: ${editUrl}\n-->\n<script type="importmap">${nl}${JSON.stringify(map, null, nl ? 2 : 0)}${nl}</script>` : ''
   }${nl}${
     scripts ? '\n' + scripts.filter(({ hidden }) => !hidden || boilerplate && !minify).map(({ url, integrity, hidden, async, module, comment, crossorigin }) =>
       `${comment && !minify ? `<!--${comment.indexOf('\n') !== -1 ? '\n  ' : ' '}${comment.split('\n').join('\n  ')}${comment.indexOf('\n') !== -1 ? '\n' : ' '}-->\n` : ''}${hidden ? '<!-- ' : ''}<script ${async ? 'async ' : ''}${module ? 'type="module" ' : ''}src="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}${crossorigin ? ' crossorigin="anonymous"' : ''}></script>${hidden ? ' -->' : ''}`
     ).join(nl + nl) : ''
   }${
     preloads ? nl + '\n' + preloads.map(({ url, integrity }) =>
-      `<link ${linkType === 'modulepreload' ? 'rel="modulepreload"' : `rel="preload" as="${linkType}"`} href="${url}"${linkType !== 'modulepreload' ? ' crossorigin="anonymous"' : ''}${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
+      `<link rel="modulepreload" href="${url}"${useIntegrity && integrity ? ` integrity="${integrity}"` : ''}/>`
     ).join(nl) : ''
   }${
-    boilerplate && !minify && !system && Object.keys(map.imports).length ? `\n\n<script type="${scriptType}">${nl}  ${Object.keys(map.imports).map(specifier =>
-      `import * as ${getIdentifier(specifier)} from "${specifier}";`
-    ).join(nl + '  ')}${nl}${nl}  // Write main module code here, or as a separate file with a "src" attribute on the module script.${nl}  console.log(${Object.keys(map.imports).map(getIdentifier).join(', ')});\n</script>` : ''
-  }${
-    boilerplate && !minify && system ? `\n\n<!-- For testing: -->\n<script>${nl}  ${Object.keys(map.imports).map(specifier =>
-  `System.import("${specifier}").then(m => console.log(m));`
-).join(nl + '  ')}\n</script>` : ''
-  }${
-    boilerplate && !minify && system ? `\n\n<!-- Load an app.js file written in the "system" module format output (via RollupJS / Babel / TypeScript) -->
-<!-- <script type="${scriptType}" src="app.js"></script> -->` : ''
+    boilerplate && !minify && Object.keys(map.imports).length ? `\n\n<script type="module">\n  ${
+      scriptTemplate(map).split('\n').join('\n  ')
+    }\n  // Write main module code here, or as a separate file with a "src" attribute on the module script.\n</script>` : ''
   }`;
   if (!boilerplate)
     return injection.slice(1);
@@ -83,14 +69,20 @@ class ImportMapApp {
         download(this.code, this.state.name + (this.state.output.json ? '.json' : '.html'));
     });
     document.querySelector('#btn-copy-share').addEventListener('click', async () => {
-      if (this.state.output.json) {
-        toast('The JSPM Sandbox only supports HTML apps.');
-      }
-      else if (!this.code) {
+      if (!this.code) {
         toast('Nothing to copy.');
       }
       else {
-        window.open(`https://jspm.org/sandbox${await getSandboxHash(this.code)}`, '_blank');
+        let importMap;
+        if (this.state.output.json) {
+          importMap = JSON.parse(this.code);
+        }
+        else {
+          const scriptStart = this.code.indexOf('<script type="importmap">') + 25;
+          const scriptEnd = this.code.indexOf('</script>', scriptStart);
+          importMap = JSON.parse(this.code.slice(scriptStart, scriptEnd));
+        }
+        window.open(`https://jspm.org/sandbox${await getSandboxHash(this.name, importMap)}`, '_blank');
       }
     });
     document.querySelector('.title input').addEventListener('change', e => {
@@ -233,28 +225,7 @@ class ImportMapApp {
 
       let { map, preloads } = await getMap(this.state.deps, this.state.output.integrity, this.state.output.preload, this.state.env, this.state.provider);
 
-      const scripts = this.state.output.system ? await getSystemScripts(this.state.output.integrity, this.state.provider) : await getESModuleShimsScript(this.state.output.integrity, this.state.provider);
-
-      if (this.state.output.system) {
-        function systemReplace (url) {
-          return url.replace(/^https:\/\/ga\.jspm\.io\//g, 'https://ga.system.jspm.io/');
-        }
-        if (preloads)
-          preloads = preloads.map(preload => ({ ...preload, url: systemReplace(preload.url) }));
-        if (map.imports) {
-          for (const impt of Object.keys(map.imports))
-            map.imports[impt] = systemReplace(map.imports[impt]);
-        }
-        if (map.scopes) {
-          for (const key of Object.keys(map.scopes)) {
-            const scope = map.scopes[key];
-            delete map.scopes[key];
-            map.scopes[systemReplace(key)] = scope;
-            for (const impt of Object.keys(scope))
-              scope[impt] = systemReplace(scope[impt]);
-          }
-        }
-      }
+      const scripts = await getESModuleShimsScript(this.state.output.integrity, this.state.provider);
 
       if (this.state.output.json)
         this.setCode(JSON.stringify(map, null, this.state.output.minify ? 0 : 2));
@@ -264,7 +235,6 @@ class ImportMapApp {
           boilerplate: this.state.output.boilerplate,
           title: this.state.name,
           scripts,
-          system: this.state.output.system,
           map,
           preloads: this.state.output.preload ? preloads : null,
           minify: this.state.output.minify,
@@ -376,7 +346,6 @@ export default new ImportMapApp({
     deno: false
   },
   output: {
-    system: false,
     boilerplate: true,
     minify: false,
     json: false,

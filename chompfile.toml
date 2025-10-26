@@ -15,13 +15,13 @@ run = 'npm install'
 [[task]]
 name = 'serve'
 deps = ['build']
-run = 'npx http-server -c-1 -o /sandbox.html'
+run = 'npx http-server -c-1 -o /index.html'
 
 [[task]]
 name = 'build'
-targets = ['sandbox.html']
+targets = ['index.html']
 deps = [
-    'sandbox.html',
+    'index.html',
     'src/**/*',
     'npm:install',
 ]

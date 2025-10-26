@@ -56,3 +56,8 @@ run = '''
 [[task]]
 name = 'deploy'
 run = 'ipfs --api=/ip4/127.0.0.1/tcp/45005 name publish /ipfs/$(ipfs --api=/ip4/127.0.0.1/tcp/45005 add -r . -Q --cid-version=1)'
+
+[[task]]
+name = 'publish'
+deps = ['build']
+run = 'jspm publish -p jspm.io'
